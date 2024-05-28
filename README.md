@@ -2,7 +2,7 @@
 
 A final thesis about " Zig as the Foundation for a Portable and Modular Game Engine" with code implementation.
 
-[Draft](./diploma/draft.md)
+[Draft](diploma/draft.md)
 
 <table align="center">
   <tr>
