@@ -50,7 +50,9 @@ To answer them the following research tasks need to be performed:
 
 The paper is structured as follows:
 
-- Section 1 introduces the theoretical part by explaining some of the software development concepts related to game development, and the research in this field done so far.
+- Section 1.1 introduces us with the research in this field done so far;
+- Section 1.2 is a theoretical part which explains some of the software development concepts related to game development;
+- Section 2.1 compares Unity and Unreal Engine;
 - Section 2.1 analyzes existing game engines;
 - Section 2.2 explains the importance of a programming language;
 - Section 2.3 evaluates the feasibility of creating games using a Zig language;
@@ -58,7 +60,7 @@ The paper is structured as follows:
 - Section 4 concludes.
 
 
-## 1. Theoretical part
+### 1.1 Theoretical part
 
 Most of the academic papers that touch the topic of game engines mention that there is not enough research being done on the topic [6][7][10][20].
 "This lack of literature and research regarding game engine architectures is perplexing."[15 p1]
@@ -148,9 +150,11 @@ Developers perceive game engines as different from traditional frameworks and cl
 Game developers often add scripting capabilities to their engines to ease the design and testing workflow,
 meanwhile frameworks products are often written in the same programming languages.
 They also explain that the reason for popularity of C family of languages is that "...engines must work close to the hardware and manage memory for performance.
-Low-level, compiled languages allow developers to control fully the hardware and memory."[1 6.3]
+Low-level, compiled languages allow developers to control fully the hardware and memory."
+For C++ in particular, following features is what made it so dominant:
+"abstraction, performance, memory management, platforms support, existing libraries, and community". [1 6.3]
 
-Toftedahl and Engström in their work discovered that on 2018 "Unity is the engine used in approximately 47 % of the games published on Itch.io."[9]
+Toftedahl and Engström in their work discovered that as of 2018 "Unity is the engine used in approximately 47 % of the games published on Itch.io."[9]
 While on Steam it comes as second (13.2%) after Unreal Engine (25.6%).
 They categorize game engines into 4 types:
 - Core Game Engine: collection of product facing tools used to compile games to be executed on target platforms. e.g. id Tech 3, Unity core;
@@ -158,16 +162,16 @@ They categorize game engines into 4 types:
 - General Purpose Game Engine: a game engine targeted at a broad range of game genres e.g. Unity, Unreal, Godot;
 - Special Purpose Game Engine: a game engine targeted at specific game genres e.g. GameMaker, Twine.
 
-Since they did not quantify the exact amount of user facing tools required for a Game Engine, I don't think they performed a proper job.
+Since they did not quantify the exact amount of user facing tools required for a Game Engine, I don't think they performed a diligent job.
 In theory, any single utility added to a Core Game Engine makes it a Game Engine.
-Additionally, their definition of Core Game Engine is in contradiction with Gregory's "Runtime Engine Architecture" where Core files are "useful software utilities" [63, p.39].
+Additionally, their definition of Core Game Engine is in contradiction with Gregory's "Runtime Engine Architecture" where Core files are "useful software utilities" [12, 1.6.6].
 Unity core contains several packages including a renderer and UI [11], meanwhile Gregory has a "Low-level Renderer" and "Front End" separate from "Core".
 As for the special purpose game engine, this can be considered as an engine that can only compile one kind of game but with different configurations.
 In which case, a mod for Minecraft can be considered a game that was produced using Minecraft engine.
 
-Before we move on to the next part, let's brief ourselves with needed terminology and a short history.
+Before we move on to the research, let's brief ourselves with needed terminology and a short history.
 
-#### Terminology
+### 1.2 Terminology
 
 So what is a game engine? "John Carmack, and to a less degree John Romero, are credited for the creation and adoption of the term game engine.
 In the early 90s, they created the first game engine to separate the concerns between the game code and its assets and to work collaboratively on the game as a team."[1]
@@ -185,11 +189,10 @@ To say that Starfield and Fallout 76 are using the “same engine” because the
 is like saying Indian and Chinese meals are identical because they both feature chicken and rice".[21]
 
 Lastly, Politowsky et al. gathered multiple definitions of "game engine":
-"In 2002, Lewis and Jacobson defined game engines as
-“collection[s] of modules of simulation code that do not directly specify the game’s behavior (game logic) or game’s environment (level data)”.
-In 2007, Sherrod defined engines as frameworks comprised of different tools, utilities, and interfaces that hide the low-level details of the implementations of games.
-Engines are extensible software that can be used as the foundations for many different games without major changes and are “software frameworks for game development”.
-They relieve developers so that they can focus on other aspects of game development” [1].
+1) collection[s] of modules of simulation code that do not directly specify the game’s behavior (game logic) or game’s environment (level data);
+2) "frameworks comprised of different tools, utilities, and interfaces that hide the low-level details of the implementations of games.
+    Engines are extensible software that can be used as the foundations for many different games without major changes and are “software frameworks for game development”.
+    They relieve developers so that they can focus on other aspects of game development” [1].
 
 In brief, they all imply that an engine is foremost a collection of software tools.
 A code that can be reused, and allows game developers to start working on an important problem instead of writing general utilities from scratch.
@@ -211,277 +214,296 @@ A shader is a program that is sent to the GPU to be executed, and it "runs on ea
 
 An important distinction we must establish is the language of engine vs language of scripting.
 An engine needs to run a game fast. But game development cycle also needs to be fast.
-For this purpose an engine can integrate a scripting language.
+For this and other purposes, an engine can integrate a scripting language.
 Such language is more limiting than the language an engine is written in, but it allows skipping a compilation step every time there is a new change to the game.
 Scripting language provides only a subset of features provided by an engine.
 A scripting language can be virtually anything, from a simple custom parser to full-fledged languages like C#, Lua or Python.
 
 Now with the theory covered, we take a look at some of the popular game engines, and gather more data from concurrent blog posts and articles.
 
----
-Draft
----
-
 ## 2. Research
 
 According to Toftedahl and Engström, Unreal and Unity are currently the most widely used game engines [9].
-It is impossible to analyze Unity's architecture due to a proprietary code base,
-Unreal Engine source code can be accessed on Github, but due to the sheer complexity of this project, analysis of its codebase is outside the scope of this paper.
-It is, however, important to understand what kind of features makes them appealing towards game developers.
+The worldwide demand for Unreal Engine skills is expected to grow 138%. [28]
+
+It is impossible to analyze Unity's architecture due to a proprietary code base.
+Unreal Engine source code can be accessed on Github, but due to the sheer complexity of this project, the analysis of its codebase is outside the scope of this paper.
+It is, however, important to understand what makes both of those engines appealing towards game developers.
 
 Throughout my university studies I've had the experience of making a game with following engines: Unity, UE4, Raylib, SDL2, OpenGL + glfw, Bevy, Godot and Mach.
 Some of them are considered general purpose, while others only provide the most basic tools that allow to draw pixels onto the screen.
 
-Firstly, we answer what features from Unity and Unreal are the most appealing for game developers and make them a guideline for our game engine.
+Firstly, we answer what set of features that provide Unity and Unreal appeals to game developers and make those features our guidelines.
+After finding the most important ones, we take a look at open-source frameworks mentioned last paragraph and judge them based on those guidelines.
+The difference in analysis between Unity and Unreal and their open-source counterparts will be in our point of view.
+First ones will be viewed via the prism of a regular game developer, while the rest via both game developer and an engine developer perspective.
+Then we compare the languages used in all of those engines and attempt to determine whether any of the language peculiarities have had a direct impact on engine's architecture.
+The final result of this research is an engine prototype.
 
+Creating a game engine is an integral part of a learning process:
+"The only way for a developer to understand the way certain components work and communicate is to create his/her own computer game engine."[13]
+The second-biggest reason why new engines are being developed is because of the learning purposes. With first reason needing more control over the environment.
+The actual need to create a game is only on a third place [1].
+Although this trivial reason only comes at a third place, as game developers, we must battle test our engines by making, even simple, games with them.
+Not ignoring artistic aspects of game development can help us while writing a game engine.
+If we get too far into engine development without ever making games with it, we might discover that our engine cannot make games.
+There is a difference between testing new features in an empty scene vs implementing them into something with actual gameplay, and distributing to other platforms. [24]
 
-Therefore, we gather the inspiration for architecture from these.
-The only way for a developer to understand the way certain components work and communicate is to create his/her own computer game engine [13].
-Plus the second biggest reason why new engines are being created is because of the learning purposes. With first reason needing more control over the environment.
-The actual need to create a game is only on third place [1].
+---
+Draft
+---
 
+### 2.1 Unity and Unreal
 
-My notes on Unity and UE5.
+There are many reasons why a certain product can gain popularity.
+For starters, both Unity and Unreal entered a market quite early. Unity's first release was in 2005, while first version of Unreal was announced back in 1998. [31]
+20 years is ample time for a product to attract users and determine their hierarchy of consumer needs.
+Nowadays, both engines are used for more than a mere vide game creation.
+Unreal is often being hailed as the future of filmmaking. Movie industry benefits from using it because working in real time makes things more dynamic.
+One can quickly visualize scenes, frame shots and experiment with the film's "world" before committing to filming.
+"Unreal Engine is an incredible catalyst for world building". [27]
+Pre-visualisation is an area where efficiency is of utmost importance.
+Results need to be handled quickly and artists must respond instantly to last-minute changes.
+To achieve success in such environment, artists need tools that will deliver instant feedback.
+Unity assists artists with their dedicated AR tools, which come pre-configured with good default options and can be used straight out of box.
+"This includes a purpose-built framework, Mars tools, and an XR Interaction Toolkit". [28]
 
-Why is everyone obsessed with Unreal Engine and Unity?
-> The trend is moving towards more and more automation of the process, and towards improving the quality of the product at the final stage.
-> Neural networks will actively help process large data sets and improve graphics variability,
->
-> The technical barrier of entry continues to get lower, so the systems aren’t just visually superior but also easier for less-technical artists.
->
-> One of the biggest opportunities is how real-time engines facilitate exchanges via the marketplace
-https://www.creativebloq.com/news/whats-the-future-for-game-engines
+Both products have helped with lowering the skill floor for beginner game developers, and this technical barrier continues getting lower.
+Not only the new games are more graphically superior but also are much easier to make for less-technical artists.
+"The trend is moving towards more and more automation of the process, and towards improving the quality of the product at the final stage." [29]
+If this pattern proves to hold, it will mean that fewer games will be made from scratch, and more reusable assets (from code to art) will be recycled to make new games.
+For a smooth experience of asset reuse, a solid marketplace will be needed.
+"One of the biggest opportunities is how real-time engines facilitate exchanges via the marketplace". [29]
+Indeed, one prominent advantage that both engines seem to possess is an online marketplace.
+An artist can scroll a catalog of assets and make a game prototype in a short time span.
 
-Unreal Engine and Unity: why you need to learn a game engine
-> The worldwide demand for Unreal Engine skills was projected to grow 138%
->
-> One of the main areas that efficiency is of the essence is with pre-visualisation.
-> Results must be delivered as fast as possible with artists responding quickly to last-minute changes.
-> For artists to thrive in this environment, they need tools that will deliver instant feedback.
->
-> This is evidenced in Unity’s dedicated AR tools, which are ready to go straight out of the box.
-> This includes a purpose-built framework, Mars tools, and an XR Interaction Toolkit.
-https://www.creativebloq.com/features/why-you-need-to-learn-a-game-engine
-
-Is Unreal Engine the future of filmmaking?
-> ...working in real time made things more dynamic.
->
-> Pros: quickly visualise scenes, frame shots and experiment with the film's "world" before committing to filming.
->
-> Unreal Engine is an incredible catalyst for world building
-https://www.creativebloq.com/features/use-unreal-engine-for-filmmaking
-
-Why the world needs more 3D designers
-> In the world of 3D design, demand is so high that there is more work to do than there are designers to do it.
->
-> Perfect photorealism will become more and more accessible, and whether to go for a conventional shoot or a CGI production will become almost only a matter of budget.
-With the rise of pdemand in 3D art, there rises a demand for a software that allows to create it.
-https://www.itsnicethat.com/features/why-the-world-needs-more-3d-designers-adobe-report-231122
-
-Unity vs Unreal: Pros and Cons
-> Unity + : cross-platform support.
-> Unreal + : support for high-definition graphics (physics, VFX, lighting, etc.). Scripting with blueprints.
-> Pros: many learning resources. Asset libraries.
-> Cons: bulky and proprietary.
-> Unity more popular then UE: beginer-friendly + bigger community.
-https://kevurugames.com/blog/unity-vs-unreal-engine-pros-and-cons/
-
-Unity - What makes it the best game engines?
-> If we were to make a list of the best engines for beginners, Unity would be on top.
-> Pros: cross-platform, simple UI, community, asset store, visual [scripting](https://unity.com/how-to/make-games-without-programming) like Bolt or Playmaker
-> VR support https://blog.unity.com/technology/ar-vr-branded-content-uncover-new-ways-to-connect-with-your-audience
-> Cons: less performance compared to narrowly focused engines, plugin support, large size, license.
-https://kevurugames.com/blog/unity-what-makes-it-the-best-game-engine/
-
-| | Unity | Unreal |
-| :--: | :--: | :--: |
-| Ease of use | beginer-friendly | steep learning curve |
-| Scripting | C# easy | C++ hard but blueprints |
-| Community | big | big but smaller than Unity |
-| Indie | prefered | no. Resource-intensive |
-| 2D | good | not prime |
-| 3D | good | superb |
-| Customization | customizable | Powerful but is seen as more rigid in terms of workflows |
-| Updates | frequent | slower |
+Despite the abundance of both free and paid 3D models available on the market, the world still needs more 3D designers.
+"In the world of 3D design, demand is so high that there is more work to do than there are designers to do it". [30]
+Perfect photorealism is becoming both more accessible and more common in design.
+In the future, whether filmmakers will go for a traditional camera shoot or CGI implementation will be a question of budget. [30]
+Consequentially, with the rise in demand for 3D art there also rises a demand for a software which allows working with it. 
 
 #### Unity
 
-Unity’s primary design goals are ease of development and cross-platform
-game deployment.
-> Game engine architecture, Jason Gregory
+In his overview of Unity, Gregory writes that the ease of development and cross-platform capabilities are its major strengths. [12 1.5.9]
+Upon further investigation of the features of this engine, I found that all the pros can be broken down into 3 rough categories: *portability, versatility and community*.
 
-> https://www.arnia.com/what-makes-unity-so-popular-in-game-development/
-    Unity 1.0 was released in June 2005.
-    The automotive industry, the architecture sector, healthcare, military, or the film industry, are just a few examples of domains that have been successfully adopting Unity.
-    Unity is now supporting over 25 different platforms.
-    Unity holds the supremacy for AR and VR as well, with over 60% of the developed content.
-    Free version.
-    Great Graphics.
-    Play Mode Option (test and review the gameplay on the go)
-    Unity Asset Store.
-    Less Coding
-    Strong Community (active forums, plenty of tutorials)
-    Built-in Analytics (Real-time data and prebuilt dashboards)
+Most of the sources that construe Unity's popularity highlight how cross-platform support greatly assists during both production and post-production phases.
+"...it [Unity] stands out due to its efficiency as well as its multitude of settings for publishing digital games across multiple platforms...
+developers select and focus their efforts on developing code on a specific platform
+without spending hours configuring implementations to make the application run on other platforms." [31]
+Unity game can be run on more than 20 different platforms, including all major desktops, Android, iOS,
+consoles like PlayStation 4 (including PS VR), PlayStation 5 (including PS VR2), Xbox One, Xbox Series S|X, Nintendo Switch and web browsers. [33]
+Apart from being able to cross-compile a game, developers are also given a powerful suite of tools for analyzing and optimizing a game for each target platform. [12 1.5.9]
 
-> https://kevurugames.com/blog/unity-what-makes-it-the-best-game-engine
-    71% of them (mobile games) are Unity-based according to Unity Technologies
-    Unity consists of 3 main parts:
-    - game engine (allows to create, test, and play 3D and 3D games and experiences in various environments);
-    - application (combines design and user interface with graphics preview and playback controls);
-    - code editor IDE (aka Integrated development environment that provides a separate text editor for writing code).
-    Free version, provided that the annual income from the game does not exceed $100,000.
-    + Unity is the best cross-platform option, covering all known modern platforms.
-    + Community, tutorials, asset store.
-    Component-based approach. Developer creates objects and adds various components to them.
-    Visual scripting with Bolt (plugin from asset store).
-    High system requirements for more advanced features (more fancy stuff - more resource consumption and no ability for optimization)
-    Less performance compared to other narrowly focused gaming engines
-    No support for links to external libraries.
-    Large size and slow.
-    Is Unity the best game engine? Answer this question yourself, because it all depends on how its functionality is suitable for the implementation of your ideas.
-    The Unity gaming engine demonstrates excellent performance in creating absolutely diverse products.
+This might be the paramount reason why Unity has withstood the test of time and managed to retain their user base.
+According to the data published by Unity Technologies, 71% of the mobile games are Unity-based. [25]
+The ability to run a game on whichever device a player might possess significantly increases the chances of your game being picked up and played.
+Especially as cross-platform games gain more and more popularity with each year. [34]
+"The possibility of fully integrating games into web browsers, at a time when mobile devices have dominated the market, is probably the future of many digital games" [31]
 
-> https://retrostylegames.com/blog/is-unity-good
-    Cross-platform games become more and more popular every year. "Players want to be able to play on whatever device they have"
-    Game Server Hosting, Matchmaker, and Cloud Content Delivery help studios enable cross-platform play.
-    Unity Asset Store offers a vast collection of assets, plugins, and tools that can be easily integrated into projects, saving time and enhancing development efficiency.
-    Absence of the need to start every project from scratch:
-    "It’s better to spend a hundred dollars on the Unity Asset Store instead of doing something that would cost twenty or thirty thousand dollars and two to three months to develop."
-    Datamining (LiveOps)
-    Unity was always well-known for its fascinating adaptability to modern trends.
-    All you should know is just how to make game art. Everything else can easily be done with Unity’s tools.
-    Unity Build Automation and Unity Version Control - devops tools. 47% of indies and 59% of midsize studios started to use DevOps to release quickly.
-    XR
-    Asset Manager Beta (important piece generally!)
-    Targeting mobile: "It’s quick to make, the potential audience is larger due to accessibility, and there’s less cost involved in making the prototype."
-    Unity Reduces Game Development Timelines
-    Keep up with AI trends:
-    - Leonardo.Ai - creating textures, images, and even 3D models.
-    - Polyhive: Texture 3D Assets with AI
-    - AutoGen - generate dynamic and realistic skyboxes using AI
-    - Shap-E - converting text input into 3D models
-    The creators of GenieLabs say that it’s much easier for game developers to allow players to create game content by themselves rather than work for years on thousands of DLCs.
-    Also, this approach helped to extend the lifespan of existing games by 33%
-    With a wide community of developers utilizing Unity, finding skilled talent becomes more accessible.
-    ...challenges with handling AAA games, large landscapes with heavy on-screen elements, and networked games.
-    Also, it can restrict deep optimizations and might require workarounds for complex tasks.
+Unity's versatility has extended its reach beyond regular game development,
+finding application in the fields that require real-time simulation such as the automotive industry, architecture, healthcare, military and film production. [35]
+A good example of a "do it all" software: a seemingly bottomless toolbox that contains the instruments useful for any professional in any industry.
+There is no kind of game you cannot create with it, be it 2D, 2.5D, 3D, XR etc. [31]
+Pixel art or photorealism, card game or platformer, fps or RPG. It does not matter.
+Its user interface is simple enough to start prototyping without coding.
+Coding part can be omitted entirely with visual scripting provided by Bolt. [25]
+"All you should know is just how to make game art. Everything else can easily be done with Unity’s tools." [34]
 
+Those tools include XR instruments (60% of AR and VR content is made with Unity [35]), Built-in Analytics (Real-time data and prebuilt dashboards).
+Game Server Hosting, Matchmaker and Cloud Content Delivery allow developer to create multiplayer games and host them on a web server.
+Unity Build Automation and Unity Version Control can take care of DevOps aspects of game development.
+(47% of indies and 59% of midsize studios started to use DevOps to release quickly)
+Asset Manager (in beta as of writing this paper) helps with managing a project's 3D assets and visualizing them in a web viewer. [34]
+This is only a tip of an iceberg, and for a full list of available features you can always refer to the official documentation.
+Not only those features are there, Unity also releases frequent updates accompanied by major fixes to software security vulnerabilities.
+To top it all off, a scripting language C# provides even more versatility with the ability to support both the back-end (Azure SQL Server with .NET)
+and the front-end (Asp.Net) of the application. [31]
+Unity's adaptability to modern trends is simply fascinating and is overall a good textbook example on how to keep a game engine up to date.
 
-#### Unreal doc
-https://docs.unrealengine.com/5.3/en-US/API/QuickStart/
-https://docs.unrealengine.com/5.3/en-US/programming-with-cplusplus-in-unreal-engine/
-TLDR Very C++ object orientedness.
+Lastly, a reason that is not exclusive to the game development and can also be equally perceived as the consequence of the two previous factors is the community.
+More specifically marketplace and learning materials.
+Unity Asset Store offers a vast collection of assets, plugins, and tools that can be easily integrated into projects, saving time and enhancing development efficiency.
+If there is some kind of tool one might need, someone has likely made it already and sells it for a cheap price on the asset store.
+When starting a new project, teams don't need to build games from scratch as many of the prerequisites can be simply acquired from there
+and be imported into a project in a matter of few clicks.
+"It’s better to spend a hundred dollars on the Unity Asset Store instead of doing something that would cost twenty or thirty thousand dollars and two to three months to develop." [34]
+By staying on the market for so long and being used in plenty of projects,
+it is no surprise that abundance of tutorials and code snippets produced by regular game developers can be found online.
+The amount of learning materials for Unity exceeds those of any other engines out there, even Unreal. [32]
+We will talk more about the importance of the community and game modding in a next chapter.
 
-UnrealBuildTool builds the targets: game, editor, etc.
-Each target is compiled from C++ modules, each implementing a particular area of functionality.
-Your game is a target, and your game code is implemented in one or more modules.
-Code in each module can use other modules by referencing them in their build rules.
-Build rules for each module are given by C# scripts with the .build.cs extension.
-Target rules are given by C# scripts with the .target.cs extension.
+Now let's discuss Unity's shortcomings.
+Biggest one stems from its desire to be versatile.
+A freshly created, empty 2D project can weight up to 1.25 GB, and PackageCache folder up to 1 GB.
+Although certain dependencies can be manually removed from "Packages/manifest.json",
+most of the modules are deeply intertwined with Unity's core, and removing them would be unwise and could lead to bugs.
+This bulkiness is fine for the modern hardware, but a resource-hungry black box which is a Unity's runtime
+is not ideal when a game needs to be run on an older hardware or power-efficient devices.
+Unity was found to have issues with CPU and GPU consumption and modules related to rendering. [31]
+Not everyone who wants to play video games can afford a modern computer or a phone.
+Unity also doesn't support linking external libraries. [25] This factor cripples its possibility to be modular.
+Additionally, with constant technological innovations, computing power can be placed into many unconventional targets like smart fridges, digital watches, thermostats etc.
+But "While Unity's cross-platform support is a significant advantage, it can also lead to suboptimal performance on certain platforms.
+Games developed in Unity may not perform as well as those developed using native game engines specifically designed for a particular platform." [32]
+Being able to play a Snake game on your toaster would be a neat little feature worth buying it.
 
-The ** Online Subsystem ** and its interfaces provide a common way to access the functionality of online services such as Steam, Xbox Live, Facebook, and so on.
-Together with Online Service and built-in source control allows to seamlessly ship new updates and work on game changes incrementally without overhead.
+Moreover, despite showing a great adaptability, Unity Technologies's leadership sometimes make for-profit business decisions that are often not perceived well by the community,
+such as one of their latest announcements about a "Runtime Fee", which will charge developers each time a game using the engine is downloaded. [36]
+This decision was harshly rebuked by community and was eventually changed to apply only to games created with Unity Pro and Unity Enterprise.
+Nonetheless, this company has shown themselves capable of trying to pull the rug out from under developers
+and not hesitating to squeeze them into debt with per/install (released game) royalties and other loathsome shenanigans.
+Problems like this are absent, as a rule, in open-source game engines which we will discuss later.
 
-C++ Wizard allows to graphically add/extend native C++ classes.
+Lastly, Unity might suffer from an identity crisis.
+It is supposed to be a "build anything" engine used by both indie and triple-A studios alike,
+however many indie studios do not need "anything", they simply need the tools to make a game in a particular genre.
+Trying to branch out into too many spaces at once instead of focusing on what they are good is a sign of their capitalistic greed, and it might bite them in the future.
+When the abundance of specialized software exists, software that is designed to excel at a small subset of features present in Unity,
+why would a company that only need those specific features use Unity?
 
-Modules are the basic building block of Unreal Engine's (UE) software architecture.
-These encapsulate specific editor tools, runtime features, libraries, or other functionality in standalone units of code.
-Modules supplied with the Unreal Engine are divided into three categories; the Runtime, functionality for the Editor, and Developer utilities.
-Most gameplay programming just uses runtime modules, and the three most commonly encountered are Core, CoreUObject and Engine.
-Modules enforce good code separation, compiled as separate compilation units, . Control when specific modules are loaded and unloaded at runtime. 
-Modules can be included or excluded from your project based on certain conditions,
+#### Unreal Engine 5
 
-Include What You Use (IWYU) allows to only include the parts that your project uses (instead of full header + source) and increases build times.
+Similar to Unity, Unreal Engine can be used for much broader purposes than just to create video games.
+It is more fitting to think about it as a real-time digital creation platform used for creating games, visualizations, generating VFX and more. [37]
+In particular, filming industry has been eagerly adopting it in recent years, being successfully used in numerous popular movies and TV series like
+"Fallout", "Love, Death + Robots", "Mandalorian", "House of the Dragon" and many more. [38][27]
+Virtual Camera system allows to control cameras inside the engine using an iPad Pro. [37]
+Gregory claims that this engine has the best tools and richest engine feature sets in the industry, and that it can create virtually any kind of 3D game with stunning visuals. [12 1.5.2]
+Unlike Unity, however, its huge arsenal of tools does not seem to be forcing a company to grow in every direction all at once.
+Unreal's identity is strikingly clear - its job is to produce the best-looking graphics possible.
+It is also mindful that plenty of AAA studio with large teams are using this engine and that team roles there are more diverse than in smaller studios, so the tools that are given
+to the artists vary in degree of complexity but are rather friendly, and the workflow for meshes and materials is similar to that of native 3D software like Blender or Maya.
+Visual scripting in a form of Blueprints is an integral part of an engine's world editor (unlike visual scripting solutions in Unity that exist only as external plugins).
+Built-in version control system allows to include a new team member into a project and easily merge new changes into a scene that a team is currently working on.
+Arguably Epic Games' most famous project Fortnite not only showcases some of the extents of its engine, but also serves as a platform for game development with Unreal Editor for Fortnite (UEFN).
+Games created with UEFN can be directly published to the Fortnite platform, reaching a built-in audience of millions. [40]
 
-The **Core** module provides a common framework for Unreal modules to communicate;
-a standard set of types, a math library, a container library, and a lot of the hardware abstraction that allows Unreal to run on so many platforms.
+![Lumen](lumen.jpg)
+Undoubtedly, the primary driver behind Unreal Engine's widespread adoption is its ability to produce stunning visuals.
+Let's delve deeper into these graphics-centric advancements.
+Three of the most talked about technologies are *Lumen, Nanite and Virtual Shadow Maps*.
+Lumen is a global illumination and reflections system. It is fully dynamic which means there is no need for light baking.
+Its "primary shipping target is to support large, open worlds running at 60 frames per second (FPS) on next-generation consoles." [41]
+It does not work on PlayStation 4 and Xbox One. Lumen provides 2 methods for ray tracing: software ray tracing and hardware ray tracing.
+Software ray tracing is more limiting as there are restrictions on what kind of geometry and materials can be used e.g. no skinned meshes.
+Lumen Scene operates on the world around the camera, hence fast camera movement will cause Lumen Scene updating to fall behind where the camera is looking,
+causing indirect lighting to pop in as it catches up.
+This system works by parameterizing surfaces in a scene into Surface Cache which will be used to quickly look up lighting at ray hit points.
+Material properties for each mesh in a scene are captured from multiple angles and populate Surface Cache.
+Lumen calculates direct and indirect lighting for these surface positions, including sky lighting.
+For example, light bouncing diffusely off a surface picks up the color of that surface and reflects the colored light onto other nearby surfaces, also known as color bleed.
+Diffuse bounces are infinite, but Lumen Scene only covers 200 meters (m) from the camera position (when using software ray tracing).
+For the fullest potential of Lumen, it is recommended to use hardware-accelerated ray tracing, but this raises a question whether Lumen's success lies with its software innovation
+or purely from the utilization of a new feature provided by the latest hardware.
+The same goes for Path Tracer.
 
-The **CoreUObject** module defines UObject, the base class for all managed objects in Unreal.
-Managed objects are key to integrating with the editor, for serialization, network replication, and runtime type information.
-
-The **Engine** module contains functionality you'd associate with a game. The game world, actors, characters, physics and special effects are all defined here.
-
-Many features are implemented using a plugin system, and are not part of an engine.
-Overall this engine can do the vast majority of tasks that one would expect in a game engine.
-
-**Supports both glTF and USD**
-
-** Datasmith **
-https://docs.unrealengine.com/5.3/en-US/datasmith-plugins-overview/
-Collection of tools to import the entire pre-constructed scene into Unreal reusing the already built assets and layouts.
-If your source scene contains multiple copies of the same geometry, Datasmith usually creates only one Static Mesh Asset for that object.
-Changes you make to any information that Datasmith brings into Unreal from your source application are tracked as overrides.
-It tracks the incremental changes from the first time it was imported in a scene, and can be reverted to any change.
-
-** Interchange Framework **
-Import and export framework. It is file format agnostic, asynchronous, customizable, and can be used at runtime.
-When you reimport an asset that was previously imported using Interchange,
-Unreal Engine remembers the pipeline stack and options that were used, and displays those options.
-
-** Lumen **
-https://docs.unrealengine.com/5.3/en-US/lumen-technical-details-in-unreal-engine/
-Lumen is a fully dynamic global illumination and reflections system.
-Lumen renders diffuse interreflection with infinite bounces and indirect specular reflections in large, detailed environments at scales ranging from millimeters to kilometers.
-Lumen Global Illumination solves diffuse indirect lighting.
-For example, light bouncing diffusely off a surface picks up the color of that surface and reflects the colored light onto other nearby surfaces —
-creating an effect called color bleed.
-Meshes in the scene also block indirect lighting, which also produces indirect shadowing.
-Lumen provides infinite diffuse bounces.
-Sky lighting is solved as part of Lumen's Final Gather process.
-It includes sky shadowing, allowing indoor space to be much darker than outdoor lighting, providing a much more natural effect.
-Lumen solves indirect specular, or reflections, for the full range of material roughness values.
-Static light is not suported by Lumen, (like stationary, it located in the same place during gameplay, but unlike stationary, the color hue or intensity is unchangeable, they are built into the lightmap).
-
-** Nanite **
-It uses a new internal mesh format and rendering technology to render pixel scale detail and high object counts.
-It intelligently does work on only the detail that can be perceived and no more.
-Nanite's data format is also highly compressed, and supports fine-grained streaming with automatic level of detail.
-https://docs.unrealengine.com/5.3/en-US/nanite-virtualized-geometry-in-unreal-engine/
-A Nanite mesh is still essentially a triangle mesh at its core with a lot of level of detail and compression applied to its data.
-On top of that, Nanite uses an entirely new system for rendering
-Increase in geometry complexity. Directly import film-quality source arts, such as ZBrush sculpts and photogrammetry scans.
-During import — meshes are analyzed and broken down into hierarchical clusters of triangle groups.
-During rendering — clusters are swapped on the fly at varying levels of detail based on the camera view and connect perfectly without cracks to neighboring clusters within the same object.
+Nanite is a Level Of Detail (LOD) system. "A Nanite mesh is still essentially a triangle mesh at its core with a lot of level of detail and compression applied to its data." [41]
+Nanite can handle orders of magnitude more triangles and instances than is possible for traditionally rendered geometry.
+When mesh is first imported into a scene, it is analyzed and broken down into hierarchical clusters of triangle groups.
+This technique that might be similar to the Binary Space Partitioning.
+"During rendering clusters are swapped on the fly at varying levels of detail based on the camera view
+and connect perfectly without cracks to neighboring clusters within the same object." [41]
 Data is streamed in on demand so that only visible detail needs to reside in memory.
-Nanite runs in its own rendering pass that completely bypasses traditional draw calls.
+Nanite runs in its own rendering pass that completely bypasses traditional draw calls. My suspicion is that this process is similar to regular batching but with more complexity.
+Overall, this addition to an engine is allows to build extremely complex open worlds with astonishing amount of details.
+Filming industry can abuse Nanite by importing high fidelity art sources like ZBrush sculpts and photogrammetry scans.
+Although it is good for complex meshes when doing cinematography,
+there are struggles with rendering a game at 60 FPS, in which case a manual optimization of LODs is preferred over relying on automatic LODs from Nanite. [42]
 
-** Virtual Shadow Maps **
-VSMs is the new shadow mapping method used to deliver consistent, high-resolution shadowing that works with film-quality assets and large, dynamically lit open worlds
-Goals:
-- Significantly increase shadow resolution to match highly detailed Nanite geometry
-- Plausible soft shadows with reasonable, controllable performance costs
-- Provide a simple solution that works by default with limited amounts of adjustment needed
-- Replace the many Stationary Light shadowing techniques with a single, unified path
-Virtual shadow maps are just very high-resolution shadow maps.
-In their current implementation, they have a virtual resolution of 16k x 16k pixels.
-Clipmaps are used to increase resolution further for Directional Lights.
-To keep performance high at reasonable memory cost, VSMs split the shadow map into tiles (or Pages) that are 128x128 each.
+Virtual Shadow Maps (VSM) is a shadow mapping method used to deliver consistent, high-resolution shadowing.
+They need to exist in order to match highly detailed Nanite geometry.
+The goal is to replace many stationary lights with a single, unified path.
+At the core they are regular shadow maps but with a high resolution (16k x 16k pixels)
+However, in order to keep performance high at reasonable memory cost, VSMs are split into Pages (small tiles) that are 128x128 each.
 Pages are allocated and rendered only as needed to shade on-screen pixels based on an analysis of the depth buffer.
-The pages are cached between frames unless they are invalidated by moving objects or light, which further improves performance.
+The pages are cached between frames unless they are invalidated by moving objects or light, which further improves performance. [41]
+Since VSMs rely on Nanite, they might suffer from similar performance issues.
 
-#### UE cons
+There are many more fascinating tools and features in this engine like Datasmith (import entire pre-constructed scenes),
+Niagara (VFX system), Control Rig (character animations), Unreal Insights (profiling)
+and an elaborate online subsystem which aids with handling asynchronous communication with a variety of online services.
+Unfortunately, review of those modules as well as popular plugins is a topic on its own and deserves a separate paper.
+We do take a brief, high level look at the architecture of its codebase, however, before exploring what drawbacks does this engine have.
 
-Engines optimizes towards a new gen graphics targets. Instead developers need to have a controll over specific target optimization (or a library doing it).
-https://forums.unrealengine.com/t/new-ue5-4-feedback-start-working-on-and-investing-in-performance-innovations-for-actual-games/1164987
+Unreal's build system is called UnrealBuildTool. A game is a target built with it, and it comprises from C++ modules, that implement a certain area of functionality.
+Code in each module can use other modules by referencing them in their build rules, which are C# scripts. This system is not much different from CMake, autotools, meson etc.
+Modules are divided into 3 categories: Runtime, Editor functionality, and Developer tools.
+Gameplay related functionality is spread throughout Runtime modules, some of the most commonly used are:
 
-Games, are being bottleneck by the source code engineer’s, not game studios(for the most part).
-https://forums.unrealengine.com/t/new-ue5-4-feedback-start-working-on-and-investing-in-performance-innovations-for-actual-games/1164987/16
+- Core: "a common framework for Unreal modules to communicate; a standard set of types, a math library, a container library, and a lot of the hardware abstraction" [41]
+- CoreUObject: a base class for all managed objects that can be integrated with the editor. It's the central object in the whole object-oriented model of the engine.
+- Engine: functionality associated with a game (game world, actors, characters, physics, special effects, meshes etc.)
 
-Heavy object-orientedness (will be discussed in next section)
+Modules enforce good code separation, and although it does not necessarily make Unreal modular in a traditional sense,
+developers are able to specify when specific modules need to be loaded and unloaded at runtime based on certain conditions.
+Include What You Use (IWYU) option further helps with compilation speeds - every file includes only what it needs,
+instead of including monolithic header files, such as Engine.h or UnrealEd.h and their corresponding source files.
+As for the gameplay programming, scripts are written in C++ like an engine itself, and they use inheritance to expand the functionality of new objects (Actors).
+There is a visual scripting language called Blueprints that allows to create classes, functions, and variables in the Unreal Editor.
+Another option for scripting is Python, however it is still on experimental stage. It is a good option when one needs to automate his workflows within the Unreal Editor.
 
-Nanite is good for complex meshes when doing cinematography and not targeting 60fps. Manual optimization is better.
-https://forums.unrealengine.com/t/nanite-performance-is-not-better-than-lods-test-results-fix-your-documentation-epic-youre-ruining-games/1263218?u=_solid_snake
+As for the drawbacks of this engine, perhaps the biggest one would be the consequence of trying to optimize toward the next generation graphics targets.
+All those innovative systems listed earlier cannot be fully taken advantage of if a game is being run on moderately powerful graphics cards prior to 20 series. [43]
+Out of all game engines we discuss in this paper, Unreal editor was the most resource hungry and caused frequent stuttering.
+These performance issues make it hard to recommend this engine for developers with a limited budget and who want to target a variety of dated platforms.
 
-Overall writing scripts feel like writing a new dialect of C++ where you need to learn new macros, naming conventions and the workflow.
-This feat forces a programmer to debug the language itself and not the software that he/she writes.
+Another noticeable issue arises when working with C++. Oftentimes writing scripts feels like writing a new dialect of C++
+where one needs to learn specific macros and naming conventions.
+A lot of Unreal's code has poor encapsulation. 
+Many member variables are public to presumable support the editor and blueprint functionality.
+Some public member functions should never be called by users, like the ones that manage the "lifetimes" of objects, but they are called by other modules of an engine.
+This clutters the interface of many objects, making it difficult to figure out what are the important interface features of unfamiliar classes.
+It is also difficult to make use of RAII due to how Unreal Engine handles the creation of UObject-derived objects.
+Managing the state of the objects via initialization/uninitialization functions requires more caution compared to traditional C++,
+and it is not uncommon for complex objects to have certain parts with a valid state while the rest is not.
 
-C# for building/dding modules. Thus the need to learn another language.
+Other cons are less problematic and can be subjective. For example people on forums claim that the documentation is subpar.
+However, what they imply is that either API reference is outdated (which is often the case for massive projects with frequent release cycles),
+or that a manual does not explain certain game development concepts close enough, which is hardly an engine's fault.
+A steep learning curve is not a problem but a price a game developers need to pay to work on next generation games.
+Tim Sweeney, a founder of Unreal Engine says "You can't treat ease-of-use as a stand-alone concept.
+It's no good if the tools are super easy to get started with, so you can start building a game,
+but they're super hard to finish the game with, because they impose workflow burdens or limited functionality." [39]
+Workflow for 2D games is not great, but from the very start of this engine, it was focused on developing shooters or first-person games. [31]
+2D is simply not its specialization to begin with.
+A need to use C# for build scripts is a peculiar decision, but there is no universal way to build C++ applications and probably never will be,
+this is a problem of the infrastructure around the language of choice and not of the engine.
+Lastly a marketplace is big, and it is integrated very well into the engine and Epic store, but it certainly could be improved.
+There are not enough filters to search for assets, and many of them are either unfinished, broken or have licensing issues which makes them impossible to use in commercial products.
 
-### 2.1. Engines analysis.
+#### Takeaways
+
+Unity and Unreal stand as titans in the game development landscape.
+Their long histories as free game engines make it a challenge for newcomers to enter the market.
+Both engines implement a royalty system for commercially successful games (Unreal at 5% above $1 million USD in sales, and Unity with variable plans).
+Source code of both engines is proprietary, but can be accessed nonetheless: Unreal on GitHub and Unity by paying for Enterprise or Industry editions.
+Games made with Unreal seem to scale up better than Unity, as they appear to have built a more robust infrastructure around the whole process of game development
+instead of simply giving developers the tools to make vide games.
+Meanwhile, Unity struggles with handling AAA games with large landscapes and heavy on-screen elements. [34]
+Yet it appears to be a better choice for newcomers: skill floor is lower and the amount of learning materials (mostly community generated) is higher.
+It is also an engine of choice for serious games, as a final game can be exported to more platforms (including web browsers) with a price of more computational resources,
+and the diversity of possible game genres is superior to that of Unreal.
+
+Importantly to the objective of this paper, we distinguished 4 key elements responsible for the popularity of a game engine:
+
+1. *Portability*. Developers want to work on games instead of figuring out how to port them to certain platforms.
+The more target platforms a game engine support - the more likely it is to be used.
+2. *Versatility*. Nobody knows how a final game will look like and what systems will it have.
+Having every possible tool available is a safety precaution that guarantees the flexibility during the production phase.
+3. *Graphics*. Even when visual fidelity is not the primary goal, everybody wants their games to look beautiful.
+4. *Community*. Games are not created in isolation from scratch.
+A good engine needs to have a straightforward way of integrating community generated content, be it code snippets or assets.
+For these purposes, it is crucial to have a first-class support for developing external plugins and assets via a marketplace.
+Knowledge needs to be passed and re-applied, for purpose of which a game engine is served as a playground to battle test new ideas and techniques.
+
+Now with those four criteria in mind, we compare some of the popular open-source engines as well as try to find what other points need to be considered when designing a game engine.
+
+### 2.2. Engines analysis.
 
 "Often authors present their own architecture as a de facto solution to their specific problem set"[15 p1]
 
-What kind of functionality is provided by those engines, that make a game developer pick this engine.
 Quote research questions from [15] and try to answer them while doing a practical example.
 - Terminology: The lack of a ‘game development’ language.
 - What is a Game Engine: Where is the boundary between game and game engine?
@@ -507,6 +529,22 @@ In Gregory's architecture, porting responsibilities take Platform Independence L
 "...engine code, depth of simulation, and profiling as some of the highly domain-specific requirements that contribute to the difficulty of writing video games.
 The author further breaks down engine code into mathematical and algorithmic knowledge and the wisdom to know how the algorithms will interact when coupled together."[7]
 
+[39]
+
+    You can't treat ease-of-use as a stand-alone concept.
+    It's no good if the tools are super easy to get started with, so you can start building a game,
+    but they're super hard to finish the game with, because they impose workflow burdens or limited functionality.
+    (making tools easy to use has its consequences)
+
+    "Big game companies like EA or Activision don't make the tools investment,
+    they don't do the sort of long term thinking we do and realize that we have to make game development processes as efficient as possible."
+
+     So many companies are now crippling their production process by building engines that are perfectly fine with tools that are not fine at all.
+     It's always the tools that kill people.
+     ...everybody should really make a conscientious decision to either fully invest in producing awesome tools for internal use, or not.
+      It's not only for the 3d editor used to build your levels, but it's your build system,
+      and it's your programming language, it's your production pipeline, it's the DCC tools you use, all of that.
+
 Paradox's engine for strategy games like Hearts of Iron
 https://venturebeat.com/pc-gaming/the-engine-behind-paradox-development-studios-future-games :
 
@@ -527,16 +565,37 @@ that started with the first Unreal, which came out in 1998."[21]
 
 Raylib, SDL2, Bevy, Godot and Mach.
 Godot is by far the most pleasant and complete General Purpose engine proposed by taxonomy.
+Bevy philosophy
+https://github.com/bevyengine/bevy/discussions/8107
+> Ideally the engine is written in the same language that games are.
+> Being able to run an IDE "go to definition" command on a symbol in your game and hop directly into the engine source is an extremely powerful concept.
 
-WebGPU.
+WebGPU and Vulkan
 
 "To arrange the assets and models in a virtual world and improve the efficiency of rendering, game engines have integrated spatial data structures.
 The most common are scene graphs, spatial partitioning, and bounding volume hierarchies (BVHs).
 However, each game engine or 3D program has their own implementation of these spatial data structures."[18]
 
+
+
+
 Modding and "the need of a uniform “game language”, but in a much wider context – involving the community aspects of communication as well"[9].
 Adding to your game the ability to mod it is like making your game a special-purpose game engine. Minecraft Skyrim and Roblox.
 "Bethesda does not release games, it releases modding toolkits" - u/Vellarain
+"I don't know what game I'm playing anymore."
+![Figure 2](mod.png)
+A popular Elden Ring mod Seemless Co-op made a game director Hidetaka Miyazaki consider whether they want to implement a start-to-finish co-op experience in their future games.
+https://www.pcgamer.com/games/rpg/fromsoftwares-says-elden-rings-seamless-co-op-mod-is-definitely-not-something-we-actively-oppose-and-may-even-consider-ideas-like-that-with-our-future-games/
+
+[34]
+
+    The creators of GenieLabs say that it’s much easier for game developers to allow players to create game content by themselves rather than work for years on thousands of DLCs.
+    Also, this approach helped to extend the lifespan of existing games by 33%
+
+[40]
+
+    ...if players love your islands, you’ll be eligible to receive payouts based on their engagement.
+
 
 Data mining is used extensively to analyze how players are interacting with the game. [8]
 
@@ -548,10 +607,58 @@ Mention the importance of a multithreading module in the engine. So that doing c
 
 Tips for VR https://blog.unity.com/games/accessible-vr-game-design-tips-from-owlchemy-labs
 
-### 2.2. Programming languages analysis
+### 2.3. Programming languages analysis
 
 During my university coursework I've had a hands on experience with C#, C, C++, Rust, JS and Zig. I will explain thier pros and cons for game development.
 Important to check the benchmarks [16][17].
+
+
+https://c0de517e.com/013_web.htm
+
+    "The art of programming close to the machine is disappearing. ... it's the silliness of divorcing programming from the craft of processing data.
+    Of having built entire engineering practices, languages, systems, that created an unmanageable amount of complexity for no good reason.
+    And then to add insult to injury, layering on top more tools in the foolish errand of trying to solve complexity with complexity."
+
+    "The average big user-facing computing thing (program, website, game...) is a monster so big that nobody understands it end-to-end."
+
+    Needles complexity, cargo-cult are introduced in production without any good reasons. Just because it's popular at a time.
+
+    "...gamedev is closer to the hardware, sure, it is more mindful of it."
+
+    Embrace the crap.
+    "Any code written for a product is beholden to the product's needs, and that inevitably makes it ugly."
+    "The art of engineering is managing the success of a product, crafting technology that is maximally useful to its purpose,
+    keeping it ahead of the competition in the areas that differentiate it,
+    and balancing the mountain of short-term needs (production pressure) with the long-term survival of the codebase."
+
+    Game devs must learn from other fields.
+    "I was "jealous" of web services mostly in terms of modularity.
+    I have always espoused the benefits of live coding, hot-reloading (patching) and very few engines work that way.
+    Moreover, few engines are even structured to have well-separated concerns."
+    "game engines have theories of API development? Do engineers debate them? Do you start on a whiteboard sketching how subsystems will be divided?"
+    Be open minded and don't be shy to learn even from "wasteful" Python.
+
+    "nowadays it became popular for languages to come with their own package management ecosystems, again,
+    privileging the idea of code reuse over code isolation, which is the only cure (imho) for complexity - tackling it with well defined runtime barriers."
+
+
+https://c0de517e.com/014_future_engines.htm
+
+    "The state of the art lies in touching as little memory as possible to initiate work.
+    ...the art of a contemporary real-time engine is in how to thin down the inevitable communication from the CPU (typically, game logic, scene updates)
+    to the command buffer generation."
+    (Command buffers are the main mechanism for sending commands from the CPU to be executed on the GPU)
+
+    "If we were to write an engine today, its role would be entirely around resource management, nothing else, on the CPU.
+    Manage memory pools, swapping (streaming) resources in and out - effectively, the CPU knows about the world and its dynamics,
+    and it constantly has to figure out what subset to expose to a GPU, in the most efficient way."
+
+    "Memory traffic is not the only limit, if anything capacity is an even bigger issue.
+    Compression will play a bigger role, in all its forms. Compressing assets for delivery, network streaming, for disk storage, in memory, in cache.
+    ...virtual texturing, displacement mapping, scattering of geometry et al."
+
+    "And low-end (a.k.a. most) mobile is a completely different ballgame, a landscape more uncharted than simply time-delayed compared to the gaming state of the art."
+
 
 C++ started as "C with classes". Object-Oriented Programming is the paradigm on which C++ was started.
 https://wordsandbuttons.online/the_real_cpp_killers.html
@@ -583,6 +690,8 @@ and suggested that object-oriented technology should be used with great care bec
 
 Zig build system allows compiling a binary for a specific target hardware, which partly solves a problem of porting from [7 5.3].
 
+Unlike other languages that tried to replace C by adding something new, Zig does the opposite - it removes as much as possible.
+
 Note about Linux as a more pleasant developing environment.
 Potential of NixOS and declarative OSes might help with reproducing development environment.
 Any professional needs a sharp tool. A software developer needs to handle his editor the same way an NB player handles a basketball.
@@ -613,8 +722,9 @@ Pull all the dependencies and compile without the errors.
 Write 2D games: Snake and Breakout and an 3D scene with a player.
 Make them run on Windows.
 
-A note about the EUGPL licencse.
+A note about the EUPL licencse.
 "open-source is the right path to follow.
+What appears to be a "finished" game can always be modded and reproduced into a new product. Thus, a game is also a game engine.
 It democratizes and allow a soft learning curve for beginners. Also, it will allow the creation of more diverse games."[1 6.4]
 [7] mentions domain specific knowledge required for engine development. Open source game/game engine with clearly distinct modules is the optimal environment for
 a developer who can apply (or try to apply) domain-specific, deeply specialized knowledge.
@@ -688,5 +798,25 @@ Game Design document need to specify more information about the game systems, so
 [19] A Python Engine for Teaching Artificial Intelligence in games
 [20] Game Development Software Engineering Process Life Cycle: A Systematic Review
 [21] The Controversy Over Bethesda's 'Game Engine' Is Misguided. https://archive.org/details/the-controversy-over-bethesdas-engine
-[22] Godot Docs v4.2. https://docs.godotengine.org/en/4.2/
+[22] Godot Docs v4.2 https://docs.godotengine.org/en/4.2/
 [23] Stroustrup, Bjarne (7 March 2010). "Bjarne Stroustrup's FAQ: When was C++ invented?". https://web.archive.org/web/20160206214150/http://www.stroustrup.com/bs_faq.html#invention
+[24] On the importance to make games during the game engine’s development. https://www.team-nutshell.dev/nutshellengine/articles/making-games-during-development.html
+[25] https://kevurugames.com/blog/unity-what-makes-it-the-best-game-engine
+[26] https://kevurugames.com/blog/unity-vs-unreal-engine-pros-and-cons
+[27] https://www.creativebloq.com/features/use-unreal-engine-for-filmmaking
+[28] https://www.creativebloq.com/features/why-you-need-to-learn-a-game-engine
+[29] https://www.creativebloq.com/news/whats-the-future-for-game-engines
+[30] https://www.itsnicethat.com/features/why-the-world-needs-more-3d-designers-adobe-report-231122
+[31] Serious Games in Digital Gaming: A Comprehensive Review of Applications, Game Engines and Advancements 
+[32] https://www.linkedin.com/pulse/unity-game-engine-pros-cons-developers-iman-irajdoost
+[33] https://docs.unity3d.com/Manual/system-requirements.html
+[34] https://retrostylegames.com/blog/is-unity-good
+[35] https://www.arnia.com/what-makes-unity-so-popular-in-game-development
+[36] https://www.theguardian.com/games/2023/sep/12/unity-engine-fees-backlash-response
+[37] https://www.creativebloq.com/features/unreal-engine-5-everything-you-need-to-know
+[38] https://www.unrealengine.com/en-US/uses/film-television
+[39] https://web.archive.org/web/20180823012812/https://www.gamasutra.com/blogs/DavidLightbown/20180109/309414/Classic_Tools_Retrospective_Tim_Sweeney_on_the_first_version_of_the_Unreal_Editor.php
+[40] https://www.unrealengine.com/en-US/uses/uefn-unreal-editor-for-fortnite
+[41] Unreal Engine 5.4 Documentation https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-5-4-documentation
+[42] https://forums.unrealengine.com/t/nanite-performance-is-not-better-than-lods-test-results-fix-your-documentation-epic-youre-ruining-games/1263218?u=_solid_snake
+[43] https://forums.unrealengine.com/t/new-ue5-4-feedback-start-working-on-and-investing-in-performance-innovations-for-actual-games/1164987
