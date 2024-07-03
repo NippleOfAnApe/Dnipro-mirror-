@@ -1,8 +1,10 @@
 # Dnipro
 
+<img src="diploma/dnipro_logo.png" width="300" height="300">
+
 Zig as the Foundation for a Portable and Modular Game Engine.
 
-Final thesis and code implementation.
+Final thesis with code implementation.
 
 ## [Draft](diploma/draft.md)
 

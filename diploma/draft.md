@@ -75,22 +75,10 @@ and identifying the best practices in a field.
 A paper also mentions an "Uberengine", a theoretical engine that allows to create any kind of game regardless of genre.
 
 A comprehensive book by Gregory [12] about the engine architecture is referenced in multiple studies.
-He proposes a "Runtime Engine Architecture", in which a game engine consists of multiple runtime components with clear dependency hierarchy.
-They are Audio (AUD), Core Systems (COR), Profiling and Debugging (DEB), Front End (FES), Gameplay Foundations (GMP), Human Interface Devices (HID),
-Low-Level Renderer (LLR), Online Multiplayer (OMP), Collision and Physics (PHY), Platform Independence Layer (PLA), Resources (RES),
-Third-party SDKs (SDK), Scene graph/culling optimizations (SGC), Skeletal Animation (SKA), Visual Effects (VFX).
-He finds an optimal middle ground between a high-level, broad description of how those modules interact with each other, and their detailed implementations.
+He proposes a "Runtime Engine Architecture", in which a game engine consists of 15 runtime components with a clear dependency hierarchy.
+We take a close look at them and debate possible modifications in Section 2.2.
+This book finds an optimal middle ground between a high-level, broad description of how those modules interact with each other, and their detailed implementations.
 Most of the examples are written in C++ and are object-oriented in nature, however.
-The exact definition of Core Systems is vague: "useful software utilities". Some of its responsibilities are:
-- Assertions(error checking);
-- Memory management (malloc and free);
-- Math library
-- Common data structures and algorithms
-- Random number generation
-- Unit testing
-- etc.
-
-This leaves a question whether a standard library can be considered a Core engine system. We discuss this in Section 2.3.
 
 Ullmann et al. [13] used this model as a target reference when exploring the architecture of three popular open-source game engines (Cocos2d-x, Godot, and Urho3D).
 They added a separate World Editor (EDI) subsystem "because it [World Editor] directly impacts game developers’ work."
@@ -140,7 +128,7 @@ This is done with high-level models such as structure and behavior diagrams as w
 and help alleviate the communication problems encountered in previous development methodologies."
 This probably means that the plague of scrum masters is inevitable.
 Another important practice is using a Game Design Document.
-[20] describes each stage in pre-production, production and post-production phases.
+[20] describes common problems faced during pre-production, production and post-production phases.
 
 [1] explores whether game engines share similar characteristics with software frameworks by comparing 282 most popular open source engines and 282 most popular frameworks on GitHub.
 "Game engines are slightly larger in terms of size and complexity and less popular and engaging than traditional frameworks.
@@ -176,8 +164,8 @@ Before we move on to the research, let's brief ourselves with needed terminology
 So what is a game engine? "John Carmack, and to a less degree John Romero, are credited for the creation and adoption of the term game engine.
 In the early 90s, they created the first game engine to separate the concerns between the game code and its assets and to work collaboratively on the game as a team."[1]
 A game became known as Doom, and it gave birth to the first-ever "modding" community.[12 1.3]
-Thus, a new game could be made by simply adding new art, environment, characters etc. inside a Doom's engine.
-It is hard to draw a line and try to fit this engine into a taxonomy proposed by Toftedahl and Engström:
+Thus, a new game could be made by simply changing game files and adding new art, environment, characters etc. inside a Doom's engine.
+It is hard to draw a line and try to fit this engine into a taxonomy proposed by Toftedahl and Engström as
 it is both a Special Purpose engine, that creates a game in a specific genre; and a Core engine, that provides useful software utilities.
 
 A general definition for a game engine that [9] provides after inspecting some of the popular engine's websites is as follows:
@@ -200,6 +188,9 @@ It is my belief that a "game engine" is an imaginary concept that is used as an 
 Therefore, for the purpose of this paper, "game engine" will imply an ecosystem around software development, which helps with producing video games in one way or another.
 Development environment potentially has a significant influence on the quality of a final product, and so cannot be ignored when designing a modern engine.
 
+Video game modding (short for "modification") is the process of alteration by players or fans of one or more aspects of a video game, such as how it looks or behaves. [45]
+Mods may range from small changes and tweaks to complete overhauls, and can extend the replay value and interest of the game.
+We cover this topic in chapter 2.2.
 During the analysis of programming languages, terms "low-level" and "high-level" will be used frequently.
 There is no clear answer what makes a particular language high- or low-level, but it is good comparison tool.
 A language like C can be perceived as low-level compared to Python, because a developer is responsible for memory management;
@@ -477,8 +468,13 @@ Games made with Unreal seem to scale up better than Unity, as Epic appears to ha
 instead of simply giving developers the tools to make vide games.
 Meanwhile, Unity struggles with handling AAA games with large landscapes and heavy on-screen elements. [34]
 Yet it appears to be a better choice for newcomers, as the skill floor is lower and the amount of learning materials (mostly community generated) is higher.
-It is also an engine of choice for serious games, as a final game can be easily exported to more platforms (including web browsers) with a price of using more computational resources,
-and the diversity of possible game genres is superior to that of Unreal.
+It is also an engine of choice for serious games, as a final game can be easily exported to more platforms (including web browsers)
+with a price of using more computational resources, and the diversity of possible game genres is superior to that of Unreal.
+
+Neither engine, however, provides any meaningful tools to solve the problems of the pre-production phase of game development that were described in [20].
+Requirements specifications for emotions, gameplay, aesthetics and immersion exist outside the engine, which makes developers not responsible for adhering to those requirements.
+This opens an opportunity for incorporating high level game system description languages (external schema) into the engine,
+which in its turn requires Game Design Documents to be an integral part of an engine.
 
 Importantly to the objective of this paper, we distinguished 4 key elements responsible for the popularity of a game engine:
 
@@ -500,7 +496,101 @@ Draft
 
 ### 2.2. Engines analysis.
 
-"Often authors present their own architecture as a de facto solution to their specific problem set"[15 p1]
+Before we begin our investigation, first we need to break down runtime architecture (RTEA) proposed by Gregory and define responsibilities of each module.
+Then we compare and contrast architectures of open source game engines/frameworks mentioned at the start of last chapter with RTEA.
+Afterwards, we expand the list of responsibilities of a theoretical uberengine and debate what kind of functionality should or should not be a part of an engine.
+![rtea](rtea.png)
+
+First distinction Gregory makes is separating a tool suite from runtime components. [12 1.6]
+Tools include a software used for asset creation like Blender and Maya for 3D meshes and animations, Krita and Photoshop for textures, Ardour and Reaper for audio clips etc.
+Those digital content creation (DCC) tools are clearly separate from the engine, and so are not a part of the RTEA.
+The same goes for the version control system and instruments around a programming language (compiler, linker, IDE).
+Yet it becomes less evident with other elements which ones should be a part of the RTEA and which ones should belong to a tool suite.
+For example performance analysis tools (profilers) vary in degree of complexity:
+some of them are standalone programs that only need an executable compiled without any extra flags (Valgrind),
+while others are designed to be injected into code to profile certain parts of a program (Tracy).
+Similarly, debugging can be done either with an executable using GDB, or a primitive console/line-drawing debugging can be performed manually for a quick and dirty visual feedback.
+Even operating system submodule is ambiguous and cannot be easily classified into neither a tool suite nor RTEA,
+as it provides a slew of drivers, system packages and a libc,
+while simultaneously being the foremost important tool for any artist or developer and the core dependency of every content creation software.
+Another element of a tool suite is the asset conditioning pipeline. It is the collection of operations performed on asset files to make them suitable for use in the engine
+by either converting them into a standardized format, a custom format supported by the engine or a binary.
+To put it simply, it is a file compression/decompression system.
+The issue with this module is that many DCC software allow for a custom plugin integration that will help with exporting the right format,
+eliminating the asset conditioning pipeline altogether, making this module entirely arbitrary depending on a game's complexity.
+Resource management submodule baffles even Gregory himself with its ambiguity and leaves him confused as to where to put it.
+It provides an interface for accessing different kinds of game assets, configuration files and other input data, making it a logical cog in the machinery of the engine.
+However, to scale a game up painlessly, an engine needs a database in order to manage all metadata attached to the assets.
+This database might take a shape of either an external relational database e.g. NoSQL or a manual management of text files,
+which again makes it unclear whether it should belong to a tool suite or be a runtime component.
+Lastly, the icing on the cake, a cherry on top, a roof for the house that is any modern game engine is the World Editor.
+"The game world is where everything in a game engine comes together." [12 1.7.3]
+Consequentially, to have a visual world editor an engine needs to be logically assembled, which makes this submodule to reside at the top of the dependency hierarchy.
+It can be architected either as an independent piece of software, built on top of lower layer modules, or even be integrated into the game itself.
+Weirdly, Gregory classify it as a part of the tool suite.
+
+Runtime components are what makes up the rest of the typical engine, and normally they are structured in layers with a clear dependency hierarchy,
+where an upper layer depends on a lower level.
+Similarly to a tool suite, it is not always obvious which category a certain submodule belongs to.
+Third-party SDKs and middleware (SDK) module lays at the lowest layer of RTEA, after an operating system (OS).
+SDK is the collection of external libraries or APIs that an engine depends on to implement its other modules.
+This might include container data structures and algorithms; abstraction over graphics APIs; collision and physics system; animation handling etc.
+Platform Independent Layer (PLA) acts as a shield for the rest of the engine by wrapping platform specific functions into more general, platform-agnostic ones.
+By doing so, the rest of the engine gets to use a consistent API across multiple targeted hardware platforms,
+as well as having the ability to switch certain parts of SDK with different ones.
+Core Systems' (COR) exact definition is vague: "useful software utilities", but some of its responsibilities are:
+- Assertions (error checking);
+- Memory management (malloc and free);
+- Math;
+- Common data structures and algorithms
+- Random number generation
+- Unit testing
+- Document parsing
+- etc.
+
+Such ambiguity inadvertently raises a question whether a standard library provided by a language can be considered a Core engine system.
+We discuss this possibility in Section 2.3.
+Resource Manager (RES), as we mentioned earlier, is firstly arbitrary, since many engines tend to delegate the logic of accessing game assets to game programmers;
+and secondly, usually in bigger engines for bigger games, resource management is divided between RTEA and a tool suite.
+Those 4 components (SDK, PLA, COR, RES) and potentially OS form the base for any game engine, even in simple cases when entire functionality resides in a single file.
+
+Another essential collection of modules can be grouped into a rendering engine.
+Rendering is the most complex part of an engine and, similarly to base components, most often architected using dependency layers.
+Low-Level Renderer (LLR) "encompasses all of the raw rendering facilities of the engine...[and] draws all of the geometry submitted to it". [12 1.6.8.1]
+It can be perceived as Core Systems but for a rendering engine.
+Scene Graph/Culling Optimizations (SGC) is a higher-level component that "limits the number of primitives submitted for rendering, based on some form of visibility determination".
+Visual Effects (VFX) includes particle systems, light mapping, dynamic shadows, post efects etc.
+Front End (FES) handles UI, aka displaying 2D graphics over 3D scene. This includes heads-up displays, in-game graphical user interface and other menus.
+
+The rest of RTEA consists of smaller, more independent components: Profiling and Debugging tools (DEB), Physics and Collisions (PHY), Animation (SKA), Input handling system (HID),
+Audio (AUD), Online multiplayer (OMP) and Gameplay Foundation system (GMP) which provides game developers with tools (often using a scripting language)
+to implement player mechanics, define how game objects interact with each other, how to handle events, etc.
+
+One last important component is Game-Specific Subsystems. Those are the concrete implementations of particular gameplay mechanics that are individual to every game,
+and highly genre-dependent.
+That's a component responsibility of which gradually shifts towards game designers.
+"If a clear line could be drawn between the engine and the game, it would lie between the game-specific subsystems and the gameplay foundations layer". [12 1.6.16]
+Therefore, this last piece lies outside RTEA, as those subsystems are genre-dependent and closely coupled with a final game, giving them their unique characteristics.
+
+Despite the fact that Gregory lists in great detail potential submodules for each module, the biggest issue of RTEA arises from the inclusion of multiple SDKs that
+act not as independent utilities but rather as mini frameworks encompassing the functionality of different components of RTEA.
+In other words, unless an engine is written entirely from scratch, addition of external libraries yields the circular dependency of engine modules,
+making it more challenging to truly modularize an engine.
+Tight coupling between subsystems becomes inevitable as a project grows in size, but there is nothing supernatural about it, as was manifested in
+"Visualizing Game Engine Subsystem Coupling Patterns" by Ullmann and the crew. [14]
+The problem is not with the coupling per se, but rather with the lack of a universal description of this engine subsystems coupling.
+When a single external library implements the functionality of multiple submodules, it is up to individual engine developers to decide how to manage a newly formed architecture.
+As an example, let's take a look at Miniquad - a minimalistic graphics toolkit written in Rust.
+Trying to fit it inside RTEA proves to be a cognitive challenge as there are 3 potential runtime components that might house this tool.
+First is obviously SDK - an interface that allows an engine to talk to the hardware; second is PLA, as it provides a unified API across different platforms;
+and lastly LLR, although not completely, because it will draw whatever geometry is submitted to it (geometry primitives are not included).
+One reasonable solution is to design a universal game engine protocol that describes every single component that can possibly be a part of the engine,
+and requiring the authors of software frameworks to use corresponding parts of this protocol as a template for their libraries.
+Writing a game engine on top of a protocol and SDKs that implement that protocol would significantly help with managing the dependency tree
+as well as with the future extension of the engine feature set, which consequently improves modding capabilities of the games built using that engine.
+
+
+
 
 Quote research questions from [15] and try to answer them while doing a practical example.
 - Terminology: The lack of a ‘game development’ language.
@@ -512,8 +602,18 @@ Quote research questions from [15] and try to answer them while doing a practica
 Where's a line between a complete game and an engine that was used building it?
 - Multiprocessing.
 
-"The establishment of clear boundaries between game engine (code) and game code" [15]
-since game engine is a collection of software utilities, any code that is used to produced a final executable, from compiler to an animation editor, is - a game engine.
+
+1. Raylib
+2. SDL2
+3. OpenGL + glfw (Vulkan, DX12)
+4. Bevy (webgpu)
+
+Bevy philosophy
+https://github.com/bevyengine/bevy/discussions/8107
+> Ideally the engine is written in the same language that games are.
+> Being able to run an IDE "go to definition" command on a symbol in your game and hop directly into the engine source is an extremely powerful concept.
+
+5. Godot
 
 Godot engine describes itself as
 "a feature-packed, cross-platform game engine to create 2D and 3D games from a unified interface.
@@ -523,6 +623,20 @@ mobile platforms (Android, iOS), as well as Web-based platforms and consoles."
 Essential, what Godot is a collection of common tools that are used to create games, that can handle the porting for a game developer.
 Here, an engine is something, that contains software components, that can be re-used to make a new game.
 In Gregory's architecture, porting responsibilities take Platform Independence Layer (PLA)
+Godot is by far the most pleasant and complete General Purpose engine proposed by taxonomy.
+
+6. Mach
+7. Possible engine architectures: OOP, ECS, procedural
+8. Modding
+9. Code/asset reuse?
+
+
+"Often authors present their own architecture as a de facto solution to their specific problem set"[15 p1]
+
+
+"The establishment of clear boundaries between game engine (code) and game code" [15]
+since game engine is a collection of software utilities, any code that is used to produced a final executable, from compiler to an animation editor, is - a game engine.
+
 
 "...engine code, depth of simulation, and profiling as some of the highly domain-specific requirements that contribute to the difficulty of writing video games.
 The author further breaks down engine code into mathematical and algorithmic knowledge and the wisdom to know how the algorithms will interact when coupled together."[7]
@@ -543,6 +657,7 @@ The author further breaks down engine code into mathematical and algorithmic kno
       It's not only for the 3d editor used to build your levels, but it's your build system,
       and it's your programming language, it's your production pipeline, it's the DCC tools you use, all of that.
 
+
 Paradox's engine for strategy games like Hearts of Iron
 https://venturebeat.com/pc-gaming/the-engine-behind-paradox-development-studios-future-games :
 
@@ -556,34 +671,54 @@ https://venturebeat.com/pc-gaming/the-engine-behind-paradox-development-studios-
     We’ve completely reworked the GUI system. Modders should be able to make super-fancy UIs without editing any code in the game.
     I think it comes down to that: We want to put as much power as we can into the hands of the people who are making content. They shouldn’t have to ask a coder for help.
 
+
+https://hytale.com/news/2024/6/summer-2024-technical-explainer-hytale-s-entity-component-system-oPwpCAMdI
+
+    They use flecs (written in C with a C++ API) as ECS foundation in a C++ engine.
+
+    Most software (and engines) use OOP or entity-component architecture because problems can be broken down into familiar structures that can be reasoned about as objects:
+    base character class that can be inherited by main player and add input handling or enemy with AI logic.
+
+    Entity-component: entities (individual units) and components (combination of data and functionality).
+    Unity can have multiple components. Difference from OOP is "composition over inheritance".
+    Such structure is more modding friendly (changing components of NPC causes a new behavior) because it allows to compose a new entity without tinkering code.
+    Scripting language can add functionality of adding new components that can be attached to existing entities.
+
+    ECS takes it a step forward by decoupling functionality from components (data) into separate systems which match entities with defined sets of components and act upon them.
+    This data layout is more efficient for the hardware:
+    "taking advantage of CPU architecture, structuring data in a tightly-packed way to benefit from its locality in access patterns,
+    and using those access patterns to parallelise as much logic as feasibly possible."
+
+    "implementing a robust and performant ECS framework from the ground up is an incredibly challenging and time-consuming endeavor.
+    There are countless different flavors of ECS, each with their own benefits and drawbacks..."
+
+    Another reason to use flecs is no need to maintain it yourselves: it is battle-tested, receives frequent updates and bugfixes, and has a comprehensive suite of tests.
+
+    "In many ways, an ECS is similar to a database, and Flecs makes full use of this fact"
+
+    At times, some of these features can be challenging to reason about, but once understood and mastered, they provide extremely powerful game development tools.
+
+
 Doom3 Source code review: https://fabiensanglard.net/doom3/index.php
 
 "As one game developer pointed out to me this morning, even the ubiquitous Unreal Engine 4 is still built on a foundation
 that started with the first Unreal, which came out in 1998."[21]
 
-Raylib, SDL2, Bevy, Godot and Mach.
-Godot is by far the most pleasant and complete General Purpose engine proposed by taxonomy.
-Bevy philosophy
-https://github.com/bevyengine/bevy/discussions/8107
-> Ideally the engine is written in the same language that games are.
-> Being able to run an IDE "go to definition" command on a symbol in your game and hop directly into the engine source is an extremely powerful concept.
-
-WebGPU and Vulkan
 
 "To arrange the assets and models in a virtual world and improve the efficiency of rendering, game engines have integrated spatial data structures.
 The most common are scene graphs, spatial partitioning, and bounding volume hierarchies (BVHs).
 However, each game engine or 3D program has their own implementation of these spatial data structures."[18]
 
 
-
-
 Modding and "the need of a uniform “game language”, but in a much wider context – involving the community aspects of communication as well"[9].
 Adding to your game the ability to mod it is like making your game a special-purpose game engine. Minecraft Skyrim and Roblox.
+Moding allows to create a new game without creating many assets or writing a lot of code.
 "Bethesda does not release games, it releases modding toolkits" - u/Vellarain
 "I don't know what game I'm playing anymore."
 ![Figure 2](mod.png)
 A popular Elden Ring mod Seemless Co-op made a game director Hidetaka Miyazaki consider whether they want to implement a start-to-finish co-op experience in their future games.
 https://www.pcgamer.com/games/rpg/fromsoftwares-says-elden-rings-seamless-co-op-mod-is-definitely-not-something-we-actively-oppose-and-may-even-consider-ideas-like-that-with-our-future-games/
+wiki for acessing game information inside a game directly.
 
 [34]
 
@@ -594,21 +729,85 @@ https://www.pcgamer.com/games/rpg/fromsoftwares-says-elden-rings-seamless-co-op-
 
     ...if players love your islands, you’ll be eligible to receive payouts based on their engagement.
 
+[44]
+
+    3 traits that determine a game's modability:
+    1. Support - how much modding support is built into a game; do developers provide any tools for this?
+    2. Nature - sandbox/open world or a fixed path game? How suitable is game's environment to a new and experimental content?
+    3. Passion - are gamers passionate about a gameto create new content/fixes for it? Unmodable game can still be reverse engineered (Dark Souls or Minecraft)
+    If all 3 are present then a game becomes a its very own game engine.
+    Doom (1 and 3, but 2 is meh)
+    Even to this day, Doom moding community is very active, and have made truly huge variations of this game, from boxing to a lawn mower sim,
+    from a trench warfare to an RPG fantasy.
+    Minecraft (not 1, but 2 and 3) Infinite and random world make it easy to place a new content wothout conflicts.
+    Simple progression = plenty of room for potential custom progres
+    Skyrim (1, 2, 3) Creation kit = same tools used by devs. Open exploration/progression. Writers use it to experience a novel interactively (forgotten city), or whole team
+    can use it to make a new game.
+    Terraria (no 1, 2, 3) not many mods because vanila game is packed with content. Mods within it do not create brand new experiences.
+
+    Author hypothesizes that a "large moding scenes might be the result of content vacum. Maybe a game can only achieve a modding heaven if its vanila base is broken."
+
+Gregory's Game-Specific Subsystems is a moddable part of a game, that blends a game with its engine.
+
+
 
 Data mining is used extensively to analyze how players are interacting with the game. [8]
 
 Alternative architectures:
-- Data-Driven Object System: https://www.youtube.com/watch?v=Eb4-0M2a9xE&t=4s (2002)
-- Game Engine Entity/Object Models: https://www.youtube.com/watch?v=jjEsB611kxs&t=4s
+**Data-Driven Object System**: https://www.youtube.com/watch?v=Eb4-0M2a9xE&t=4s (2002)
 
-Mention the importance of a multithreading module in the engine. So that doing concurrenc becomes an app's own responsibility and not having to rely on OS thread.
+    Goal: remove programmers from a picture as much as possible, keeping designers close to the game.
+    Game object - piece of logical interactive content (tree, monster, character, triggers, bounding boxes)
+    Game object system - construct and manage game objects.
+
+    Usual OOP composition is never perfect because there are hundreds of ways to decompose the GO system problem into classes.
+    It starts good, but as a game grows bigger and classes need to be expanded, logical chain gradually dissapears.
+    Designers make decisions independently of engineering type structures and will ask for things that cut across engineering concerns.
+
+    GOs are simply a database in a traditional sense. A list of components.
+    Component system is flat, and each component is self-contained piece of game logic.
+    Components are asembled into GOs to build complete objects. e.g component that can draw has model, texture ... then this component is added to e.g. tree or enemy. 
+    Data preferably is in specialization tree (hierarchy) to be able to reuse data.
+    External schema that describes GO hierarchy and some properties.
+
+    Consists of 2 parts:
+    Dynamic content - GOs created at runtime, die and go away. Componets are made inside scripts. Engine specific performance stuff is for C++.
+    Static content - content database, data that goes to schema. Templates that determine how to construct objects from components.
+
+    Parent componets can use OOP features like base class component that will handle messages, have constructor etc
+    GO script component base(parent) component that used in scripting lang. Engine doesnt care C++ or script component.
+
+Game Engine **Entity/Object Models**: https://www.youtube.com/watch?v=jjEsB611kxs&t=4s
+
+    
+
+Mention the importance of a multithreading module in the engine. So that doing concurrency becomes an app's own responsibility and not having to rely on OS thread.
 
 Tips for VR https://blog.unity.com/games/accessible-vr-game-design-tips-from-owlchemy-labs
 
 ### 2.3. Programming languages analysis
 
-During my university coursework I've had a hands on experience with C#, C, C++, Rust, JS and Zig. I will explain thier pros and cons for game development.
+During my university coursework I've had a hands on experience with C#, C, C++, Rust, JS and Zig. I will explain their pros and cons for game development.
+We will also take a look at some other potential languages that might suit for game development.
 Important to check the benchmarks [16][17].
+
+As was described by [1] in Theoretical part, C and C++ became popular because of the access to the hardware memory.
+
+“write-compile-run-debug” loop
+
+[12 1.6.15.1]
+
+    The game world model is intimately tied to a software object model, and this model can end up pervading the entire engine.
+    The term software object model refers to the set of language features, policies and conventions used to implement a piece of object-oriented software.
+    In the context of game engines, the software object model answers questions, such as:
+    - Is your game engine designed in an object-oriented manner?
+    - What language will you use? C? C++? Java? OCaml?
+    - How will the static class hierarchy be organized? One giant monolithic hierarchy? Lots of loosely coupled components?
+    - Will you use templates and policy-based design, or traditional polymorphism?
+    - How are objects referenced? Straight old pointers? Smart pointers? Handles?
+    - How will objects be uniquely identified? By address in memory only? By name? By a global unique identifier (GUID)?
+    - How are the lifetimes of game objects managed?
+    - How are the states of the game objects simulated over time?
 
 
 https://c0de517e.com/013_web.htm
@@ -658,6 +857,49 @@ https://c0de517e.com/014_future_engines.htm
     "And low-end (a.k.a. most) mobile is a completely different ballgame, a landscape more uncharted than simply time-delayed compared to the gaming state of the art."
 
 
+W. Zhang, D. Han, T. Kunz and K. M. Hansen, "Mobile Game Development: Object-Orientation or Not," 31st Annual International Computer Software and Applications Conference (COMPSAC 2007), Beijing, China, 2007, pp. 601-608, doi: 10.1109/COMPSAC.2007.151.
+
+    Mobile games are one of the primary entertainment applications at present.
+    Limited by scarce resources, such as memory, CPU, input and output, etc, mobile game development is more difficult than desktop application development,
+    with performance as one of the top critical requirements.
+    As object-oriented technology is the prevalent programming paradigm, most of the current mobile games are developed with object-orientation (OO) technologies.
+    Intuitively OO is not a perfect paradigm for embedded software.
+    Questions remain such as how OO and to what degree OO will affect the performance, executable file size,
+    and how optimization strategies can improve the qualities of mobile game software.
+    These questions are investigated in this paper within the mobile Role-Playing-Game (RPG) domain using five industrial mobile games developed with OO.
+    We analyzed them and found excessive usage of OO features used for the development of mobile device applications (but normal for usual desktop applications).
+    We then apply some optimization strategies along the way of structural programming.
+    The experiment shows that the total jar file size of these five optimized games decreases 71%, the lines of codes decreases 59%,
+    and the loading time of each optimized game decreases 22.73%, 34.62%, 25.79%, 24.65% and 16.70% respectively.
+    Therefore, we conclude from our experiments that OO should be used with great care in the development of mobile games,
+    and that structural programming can be a very competitive alternative.
+
+TODO read
+https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction
+
+    prefer duplication over the wrong abstraction
+
+https://zserge.com/posts/better-c-benchmark
+
+    UX of a programming language (how productive the developer is when using this or that language; ease of use; frustrations)
+
+    Zig is surprisingly intuitive to a C coder and feels very simple (to concatenate strings one has to do everything manually - allocate the buffer, put strings there).
+    A bit verbose, but explicit, predictable and easy to understand.
+    The core of the language is so simple that it does not even use dynamic memory (need to carry the allocator around).
+    Language doc - good, stdlib doc - bad.
+    Smallest exe.
+
+    Rust doc - comprehensive (a bit too much), tooling - modern and nice.
+    Coding in Rust feels like puzzle solving. Could be fun and exciting as hobby, but not ergonomic.
+    Largest exe.
+
+    Go - productive (concise doc), but opinionated (not as much controll as Zig, buffered I/O, GC).
+    Fastest build times.
+
+    C++ extensive doc, many examples, powerful stdlib, lsp.
+    Poor toolign - no derfault build system, no linting. Many flavors?
+
+
 C++ started as "C with classes". Object-Oriented Programming is the paradigm on which C++ was started.
 https://wordsandbuttons.online/the_real_cpp_killers.html
 
@@ -672,8 +914,6 @@ https://blog.sigma-star.io/2024/01/people-dont-understand-oop/
     "Objects are collections of operations that share a state."
 
 https://loglog.games/blog/leaving-rust-gamedev/
-
-As was described by [1] in Theoretical part, C and C++ became popular because of the access to the hardware memory.
 
 Cross-compilation. Windows and Unix. Wine and emulation.
 
@@ -690,6 +930,8 @@ Zig build system allows compiling a binary for a specific target hardware, which
 
 Unlike other languages that tried to replace C by adding something new, Zig does the opposite - it removes as much as possible.
 
+https://wikiless.tiekoetter.com/wiki/Comparison_of_programming_paradigms?lang=en
+
 Note about Linux as a more pleasant developing environment.
 Potential of NixOS and declarative OSes might help with reproducing development environment.
 Any professional needs a sharp tool. A software developer needs to handle his editor the same way an NB player handles a basketball.
@@ -698,7 +940,7 @@ Benefits of modal editing and nvim.
 "...Windows was not meant for the type of development necessary for video games.
 Microsoft Visual Studio was built for Visual Basic and C# mainly, not for C++, but the only viable C++ compiler and environment on Windows remains Visual C++." [7]
 
-Cargo cult programming and software development meta.
+Cargo cult programming (practice of applying a design pattern or coding style blindly without understanding the reasons behind that design principle) and software development meta.
 
 ### 2.4. Practical example
 
@@ -764,7 +1006,7 @@ and art assets are produced to make a game”. [9 p8]
 
 Do we need to draw the boundaries between a game, an engine and a framework?
 
-Standardization of engines and protocol?
+Game engine protocol describing all the components of the game engine. Requires a thorough research of existing game engines.
 
 ## 4. Conclusion
 
@@ -816,3 +1058,5 @@ Game Design document need to specify more information about the game systems, so
 [41] Unreal Engine 5.4 Documentation https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-5-4-documentation
 [42] https://forums.unrealengine.com/t/nanite-performance-is-not-better-than-lods-test-results-fix-your-documentation-epic-youre-ruining-games/1263218?u=_solid_snake
 [43] https://forums.unrealengine.com/t/new-ue5-4-feedback-start-working-on-and-investing-in-performance-innovations-for-actual-games/1164987
+[44] Modding Heaven: When Games Become Engines. https://youtu.be/bmVsv15gjdg?si=edHuytBVkTX4jlEz
+[45] Poor, Nathaniel (24 September 2013). "Computer game modders' motivations and sense of community: A mixed-methods approach". New Media & Society. 16 (8): 1249–1267. doi:10.1177/1461444813504266. S2CID 39280896
