@@ -1,21 +1,16 @@
 # Dnipro
 
-<img src="diploma/dnipro_logo.png" width="300" height="300">
-
 Zig as the Foundation for a Portable and Modular Game Engine.
-
-Final thesis with code implementation.
-
-Zig compiler version is `0.13.0-dev.351+64ef45eb0`
 
 ## [Draft](diploma/draft.md)
 
-Example architecture file from [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer/blob/d7c99931d05e3723d878bea5dc26766791fa4e69/docs%2Fdev%2Farchitecture.md)
+Final thesis with code implementation.
 
-Example Design file from [TigerBeetle](https://github.com/tigerbeetledb/tigerbeetle/blob/fe09404d465df46b2bdfc017633eff37b4ab2343/docs%2FDESIGN.md)
+<img src="diploma/dnipro_logo.png" width="300" height="300">
+
+Zig compiler version is `0.13.0-dev.351+64ef45eb0`
 
 Example [mermaid diagram](https://github.com/mermaid-js/mermaid)
-
 
 ```mermaid
 classDiagram
@@ -36,6 +31,11 @@ class Class10 {
 }
 
 ```
+Example architecture file from [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer/blob/d7c99931d05e3723d878bea5dc26766791fa4e69/docs%2Fdev%2Farchitecture.md)
+
+Example Design file from [TigerBeetle](https://github.com/tigerbeetledb/tigerbeetle/blob/fe09404d465df46b2bdfc017633eff37b4ab2343/docs%2FDESIGN.md)
+
+---
 
 <table align="center">
   <tr>
