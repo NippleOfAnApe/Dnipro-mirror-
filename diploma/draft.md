@@ -79,7 +79,7 @@ We take a close look at them and debate possible modifications in Section 2.2.
 This book finds an optimal middle ground between a high-level, broad description of how those modules interact with each other, and their detailed implementations.
 Most of the examples are written in C++ and are object-oriented in nature, however.
 
-Ullmann et al. [13] used this model as a target reference when exploring the architecture of three popular open-source game engines (Cocos2d-x, Godot, and Urho3D).
+Ullmann et al. [13] used this model as a target reference when exploring the architecture of three popular open source game engines (Cocos2d-x, Godot, and Urho3D).
 They added a separate World Editor (EDI) subsystem "because it [World Editor] directly impacts game developers’ work."
 Godot was found to have all 16 out of 16 subsystems, while Cocos2d-x and Urcho3D 13 and 12 respectively.
 However, the missing functionality was not absent, but rather scattered among other subsystems.
@@ -219,12 +219,12 @@ According to Toftedahl and Engström, Unreal and Unity are currently the most wi
 The worldwide demand for Unreal Engine skills is expected to grow 138% over 10 years. [28]
 Therefore, it is, crucial to understand what makes both of those engines appealing towards game developers.
 
-During my university years I've had the experience of making a game with following engines: Unity, UE4, Raylib, SDL2, OpenGL + glfw, Bevy, Godot and Mach.
+During my university years I've had the experience of making a game with following engines: Unity, UE4, Raylib, SDL2, OpenGL + glfw, Bevy and Godot.
 Some of them are considered general purpose, while others only provide the most basic tools that allow to draw pixels onto the screen.
 
 We begin this research by answering what set of features provided by Unity and Unreal appeals to game developers and make those features our guidelines.
-After finding the most important ones, we take a look at open-source frameworks mentioned last paragraph and analyze them based on those guidelines.
-The difference in analysis between Unity and Unreal and their open-source counterparts will be in our point of view.
+After finding the most important ones, we take a look at open source frameworks mentioned last paragraph and analyze them based on those guidelines.
+The difference in analysis between Unity and Unreal and their open source counterparts will be in our point of view.
 First ones will be viewed from the point of view of a regular game developer, while the rest from both game developer and an engine developer perspective.
 Then we compare the languages used in all of those engines and attempt to determine whether any of the language peculiarities have had a direct impact on engine's architecture.
 The final result of this research is an engine prototype.
@@ -342,7 +342,7 @@ such as one of their latest announcements about a "Runtime Fee", which will char
 This decision was harshly rebuked by community and was eventually changed to apply only to games created with Unity Pro and Unity Enterprise.
 Nonetheless, this company has shown themselves capable of trying to pull the rug out from under developers
 and not hesitating to squeeze them into debt with per/install (released game) royalties and other loathsome shenanigans.
-Problems like this are absent, as a rule, in open-source game engines, some of which we discuss later.
+Problems like this are absent, as a rule, in open source game engines, some of which we discuss later.
 
 Lastly, Unity might suffer from an identity crisis.
 It is supposed to be a "build anything" engine used by both indie and triple-A studios alike,
@@ -483,7 +483,9 @@ which in its turn requires Game Design Documents to be an integral part of an en
 Importantly to the objective of this paper, we distinguished 4 key elements responsible for the popularity of a game engine:
 
 1. *Portability*. Developers want to work on games instead of figuring out how to port them to certain platforms.
-The more target platforms a game engine support - the more likely it is to be used.
+The more target platforms a game engine support - the more likely it is to be used
+(to develop for consoles, one must be licensed as a company. Console SDKs are secret and covered by non-disclosure agreements.
+Therefore, no game engine under an open source license is allowed to legally distribute console export templates [22]).
 2. *Versatility*. Nobody knows how a final game will look like from the start and what systems will it need.
 Having every possible tool available is a safety precaution that allows the flexibility during the production phase.
 3. *Graphics*. Even when visual fidelity is not the primary goal, everybody wants their games to look beautiful.
@@ -492,14 +494,14 @@ A good engine needs to have a straightforward way of integrating community gener
 For these purposes, it is crucial to have a first-class support for developing external plugins and assets via a marketplace.
 Knowledge needs to be passed and re-applied, for purpose of which a game engine is served as a playground to battle test new ideas and techniques.
 
-Now with those four criteria in mind, we compare some of the popular open-source engines as well as try to find what other points need to be considered when designing a game engine.
+Now with those four criteria in mind, we compare some of the popular open source engines as well as try to find what other points need to be considered when designing a game engine.
 
 ### 2.2 Engine analysis.
 
 Our investigation begins by examining the research questions posed by Anderson and friends [14] which serve as a starting point for formulating a universal engine architecture.
 We then analyze the Runtime Engine Architecture (RTEA) proposed by Gregory and define the responsibilities of each module.
 Then we take a look at common game world models to explain how game objects can be managed inside the engine.
-This is followed by a comparative analysis of open-source engines and frameworks mentioned at the start of a previous chapter,
+This is followed by a comparative analysis of open source engines and frameworks mentioned at the start of a previous chapter,
 contrasting their architectures with the RTEA model.
 Finally, we expand on the potential responsibilities of a general purpose engine,
 debating which functionalities should or should not be incorporated into a game engine's core design and whether game modding should be treated as a part of the game development.
@@ -549,8 +551,8 @@ Resource management (RES) submodule baffles even Gregory himself with its ambigu
 RES provides an interface for accessing different kinds of game assets, configuration files and other input data, making it a logical cog in the machinery of the engine.
 However, to scale a game up painlessly, an engine needs a database in order to manage all metadata attached to the assets.
 This database might take a shape of either an external relational database like NoSQL or a manual management of text files.
-Lastly, the icing on the cake, a cherry on top, a roof for the house that is any modern game engine is the World Editor (EDI).
-"The game world is where everything in a game engine comes together." [12 1.7.3]
+Lastly, the icing on the cake, a cherry on top is the World Editor (EDI) - a place "where everything in a game engine comes together." [12 1.7.3]
+"Scene creation is a large part of game development and in many cases visual editors beat code." [58]
 Consequentially, to have a visual world editor an engine needs to be logically assembled, which makes this submodule to reside at the top of the dependency hierarchy.
 It can be architected either as an independent piece of software, built on top of lower layer modules, or even be integrated right into a game.
 A world editor allows to visually create and manage both static and dynamic objects, navigate in a game world, display selections, layers, attributes, grids etc.
@@ -778,10 +780,10 @@ The reason for this is that "designers make decisions independently of engineeri
 
 3. **Entity-Component-System Model (ECS)**
 
-This rather radical and modern approach treats GOs (entities) as a database and game logic is performed by querying specific components. [52][53]
+This rather radical which gained popularity very recently treats GOs (entities) as a database and game logic is performed by querying specific components. [52][53]
 The purpose of this model is to decouple logic from data to allow a game to be highly modular and flexible.
 An *entity* is simply an ID, meaning it doesn't exist as an actual object, and *components* are pure data containers.
-Logic is moved into systems and systems match on entities with specified components. All update logic resides in them which makes them highly parallelizable.
+Logic is moved into *systems* and systems match on entities with specified components. All update logic resides in them which makes them highly parallelizable.
 Just like in OCM, there is no one standard way to define an ECS model and there are many different flavors of it. [47]
 
 By far the biggest advantage of such object organization that everyone seems to mention first is the performance and memory efficiency:
@@ -823,68 +825,341 @@ For more information about both OCM and ECS check his amazing presentation. [47]
 Now that we have a proper understanding of both an engine architecture and a game world model, we can finally take a look at some of the existing game engines
 and analyze their 1) architecture, 2) game world model, 3) portability, 4) versatility, 5) graphics and 6) community.
 
+#### 2.2.3 Raylib
+
+Raylib is not a game engine in a typical sense, but it describes itself as "a programming library to enjoy videogames programming." [54]
+It is used not only for game development, but also to create new engines on top of it or any graphical/visualization applications.
+Raylib's main language is C, but there are more than 70 bindings to other languages such as C#, Lisp, Go, Python and whatnot.
+Target platforms include all major desktops, Android, Web and ARM-based devices like Raspberry Pi.
+This framework is relatively simple and easy to learn: 558 functions and 34 data types; only ~10% of its functions deal with data pointers; more than 140 code examples.
+There is no standard API documentation so the main way to learn it is by reading a cheatsheet that briefly describes provided functionality, as well as to read through the examples.
+Although some might argue that such approach is not beginner-friendly, I would parry by saying that learning the very fundamental principles of game development requires you
+to be comfortable reading the code and the documentation.
+
+![Raylib](raylib_architecture_v5.0.png)
+
+But how is the architecture structured here and how similar is it to RTEA?
+Raylib is broken down into 7 self-contained main modules, visual representation of which is depicted above, and each module is organized according to its primary functionality.
+The modules are as follows:
+- `rcore` - window creation and management, setting up and populating graphic context, shader management,
+files management (file system operations, compress and decompress files), input handling, camera management and other smaller utility functions;
+- `rlgl` - graphic API wrapper and pseudo-OpenGL 1.1 translation layer, that contains all OpenGL API calls.
+This module works as an abstraction layer for multiple versions of OpenGL: 1.1, 2.1, 3.3 Core, 4.3 Core, ES 2.0;
+- `rtextures` - texture/image loading, generation and manipulation and drawing. 15 different file formats are supported;
+- `rtext` - font data loading and text drawing;
+- `rshapes` - basic 2D shapes drawing functions (pixel, line, circle, polygon, spline) as well as shape's collision detection;
+- `rmodels` - loading and drawing of 3D models or basic 3D shapes, their materials, animations and collision detection;
+- `raudio` - audio device management and sound/music loading and playing.
+
+Apart from 7 main modules raylib also provides extra modules that expand engine capabilities.
+They are designed to be as decoupled as possible from other modules and therefore can be used as standalone libraries in other projects. The extra modules are:
+- `raymath` - math functions to work with Vector2, Vector3, Matrix and Quaternions. Compiled with raylib by default;
+- `rcamera` - basic camera system with support for multiple camera modes (free, 1st person, 3rd person, custom). Compiled with raylib by default;
+- `rgestures` - gesture detection and processing (Tap, Swipe, Drag, Pinch) based on touch or mouse input events. Compiled with raylib by default;
+- `raygui` - a minimalistic immediate-mode-gui library that can be used for all sorts of tools development.
+- `rres` - a file format designed to package game assets (images, fonts, text, audio, models etc.) into a self-contained comprehensive format that is efficient to read and write to.
+
+The most subtle difference between the architecture of raylib and RTEA is that raylib's `rcore` module unites COR (Core Systems) and PLA (Platform Independent Layer)
+by doing conditional defines based on a relatively small number of target platforms, as well as including HID (Human Interface Device) module.
+What is LLR (Low-level renderer) in RTEA, in raylib is being split into 5 parts: a graphics device interface `rlgl` and 4 specialized modules that communicate with it -
+`rtextures`, `rtext`, `rshapes` and `rmodels`, with last one also implementing the functionality of SKA (Skeletal animation).
+RES (Resources) module from RTEA instead of being a single place responsible for resource management, in raylib is split between aforementioned 4 specialized modules,
+as well as PHY (Collision and Physics).
+Such approach greatly facilitates modularity of an engine, but when a game grows larger, this separation might become harmful because there are increasingly more
+places to keep track of where memory allocations and de-allocations are happening.
+RTEA's FES (Front End) and AUD (Audio) are `raygui` and `raudio` respectively.
+Last point to note about architecture is that raylib relies on a number of external libraries to load specific file formats of images, fonts, audio and 3D models.
+SDK module implies that any external library should pass through PLA to provide a unified interface for all other engine modules,
+however in raylib only OpenGL follows this convention, while every other external library is used inside modules directly, bypassing PLA.
+Despite the fact that all the dependencies and reasoning for using them are specified in the documentation, in my opinion it is still missing some sort of guideline on how to get and
+use them - a point raised by Joanna May in "Enjoyable Game Architecture" when she mentions that one of the responsibilities of the game architecture is structure. [50]
+
+Raylib does not enforce any particular game world model and there are no real game objects, only intermediary types that are being passed to functions,
+and functions either draw something on screen or perform user-specified logic - a perfect example of a Procedural model.
+This approach is what allows this engine to be highly modular. In fact not only modules from `extra` can be used as standalone libraries, but also `rlgl` and `raudio`.
+This modularity, as well as an excellent documentation are the main reasons why raylib is such a magnificent learning tool - developers can pick out and swap any part
+of an engine without worrying that it will affect other components.
+However, the biggest drawback of this approach is that thinking about a game in terms of procedures is not very productive when it starts to scale up,
+and to combat this, one would need to implement an actual game world model, either from scratch or by importing an external solution.
+
+Portability of raylib does not come close to Unity's level - no support for iOS, nor for modern consoles (we mentioned why open source engines cannot support consoles in section 2.1.3).
+However, in theory certain modules of raylib can be reused, in which case they would be viewed as third party tools in another engine, rather than being an engine on its own.
+Nonetheless, it supports both Desktop and Android platforms which covers the biggest chunk of the game market.
+The versatility and graphics are probably the weakest aspects which is directly correlated with raylib's philosophy of being simple and easy to learn.
+By limiting the amount of possible features, as well as using an outdated but simpler graphics API, it lowers the skill floor for beginner game developers.
+Community, on the other hand, is the strongest suite - more than 70 bindings to other languages, unofficial ports to other platforms such as iOS
+and countless open source hobby projects that use raylib at their core and showcase its full power.
+
+Overall, the purpose of Raylib seems to be to explain the basic components of video games and how they are interacting, as well as to teach C programming by making games.
+Ramon Santamaria, Raylib's author assures that "... many hours have been put into the API design;
+thinking about the best name for every function, the minimum number of parameters required, the right name of each parameter, the data types structure and more." [54]
+This is undoubtably showing when reading the documentation -
+every design choice is explained in exhaustive details, from syntax analysis to expounding which particular functionality is being imported from external libraries.
+It is also worth pointing out that all external libraries are under permissive licenses which allows raylib to be used on commercial projects without any legal obligations.
+
+#### 2.2.4 SDL, glfw and graphics APIs
+
+As we have observed in raylib's architecture, most of its modules can be united under the umbrella of LLR (Low-level renderer),
+which would rightfully suggest that raylib is simply a rendering engine.
+Anyone who has ever indulged in graphics programming must certainly have heard about SDL, a framework used for a similar purpose.
+But in order to fully grasp the difference between the two, and potentially between other engines, we need to have at least a basic grasp of what is OpenGL and how to use it.
+Modern graphics APIs like Vulkan, DirectX12, Metal and WebGPU greatly differ from OpenGL, and there are numerous books that cover this topic,
+but what is important right now is that OpenGL is a more simple legacy API that hides many under-the-cover details about a GPU device.
+
+A Reddit user u/amdreallyfast explains in plain language a short history of OpenGL and libraries around it. [56] 
+OpenGL started at the time when video cards were rare and there was a need to interface different hardware drivers.
+At the time, C-style programming was well established and in order to connect OpenGL functions with different drivers, Khronos group decided to use function pointers.
+To connect function pointers such as `glViewport()` or `glGenBuffers()` with a library that defines what those functions do and how they talk to operating system's video card driver
+one needs to initialize OpenGL "context" - to run some prior code that will connect function pointers.
+One such context initializing library is GLEW (OpenGL Extension Wrangler).
+Other people devised the idea of an event-driven loop with user-registered functions.
+An example of this is GLUT (OpenGL Utility Toolkit) - it creates a window and registers certain event functions (update, input, draw, idle, etc.) by passing a function pointer,
+and calling it when the appropriate event occurs.
+But as time passes and OpenGL versions evolve, others make their own window management/event loop APIs:
+FreeGlut (window management), GLLoad (OpenGL state initializer) and GLFW (state initializer + window management).
+All of them operate on a C-style paradigm of function pointers.
+Then GUI framework Qt decided to make everything from scratch: window management, event loops, and OpenGL context initialization in a single OOP package. [56]
+One additional piece that an author forgot to mention is that for any version of OpenGL older than 1.1,
+additional loader library is required to override the original `gl.h` with the one of a newer version.
+The most popular one is glad - it allows to generate files with a specified version and include extensions of choice.
+
+Raylib relies on GLFW for context initialization and window/input management, but SDL implements this functionality internally because it uses a combination of OpenGL and Direct3D.
+SDL provides a more fine-grained control (file IO, multithreading, timers, CPU detection, power management status) over the target platform compared to raylib.
+"Raylib provides some higher-level functionality and takes multiple decisions for the user to simplify API usage." [55]
+A comparison of code complexity between the two is demonstrated below:
+
+SDL: Window and renderer initialization/deinitialization (modern OpenGL)
+```c
+    // Initialize SDL internal global state
+    SDL_Init(SDL_INIT_EVERYTHING);
+
+    // Init window
+    SDL_Window *window = SDL_CreateWindow("Welcome to SDL OpenGL!", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
+
+    // Init OpenGL context
+    SDL_GLContext glcontext = SDL_GL_CreateContext(window);
+    
+    // App loop
+    while (!closeWindow)
+    {
+        // Process input events
+    
+        // Draw using OpenGL 
+        // NOTE: It's up to the user to load required extensions and manage OpenGL state and drawing
+        glClearColor(0,0,0,1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        SDL_GL_SwapWindow(window);
+    }
+
+    // Deinitialize OpenGL context and window
+    SDL_GL_DeleteContext(glcontext);
+
+    // Deinitialize SDL internal global state
+    SDL_Quit();
+```
+
+raylib: Window and renderer initialization/deinitialization (modern OpenGL)
+```c
+    // Init raylib internal global state and create window
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Welcome to raylib!");
+    
+    // App loop...
+    while (!WindowShouldClose())
+    {
+        // Draw
+        BeginDrawing();
+        ClearBackground(BLACK);
+            
+        // Input events are processed internally by default
+        EndDrawing();
+    }
+    
+    // Deinitialize raylib internal global state and window
+    CloseWindow();
+```
+
+Architecture-wise, SDL consists of a main library focused on system functionality and some satellite libraries meant to be useful but optional
+like image loading, font loading and text generation, managing audio devices or networking functionality.
+There are around 700 source code files organized by systems, platforms and backends, therefore a build system is much more complex than of raylib, and 
+it is designed to be dynamically linked (raylib supports both static and dynamic linking).
+Unlike in raylib, most functions accept references and return error codes to check if they worked as expected.
+SDL is backward-compatible as deprecated functions are kept in the library, while raylib does not care about backward-compatibility. [55]
+Viewing it through a prism of RTEA, it nicely fits into PLA module as well as bare minimum of LLR, which can further extended with satellite libraries.
+Raylib's approach is to use glfw, which is a pure PLA module, and to implement COR and LLR on top of it.
+
+Neither of those frameworks provides any dedicated game world models by default, as both are written in C and focus on lower-level aspects.
+Official target platforms for SDL include the same as for raylib as well as iOS, meaning that support for Xbox and PlayStation is not provided by default [57],
+but many game development teams have internally adopted it to console SDKs. [55]
+In terms of features, raylib holds an upper hand, supporting 3d meshes, materials and animations loading for several 3d formats,
+providing more functions to render geometry shapes, ability to generate and manipulate images,
+and providing an embedded font so that users can draw text by default.
+However, SDL provides "raw" data from input events directly to the user, giving him more power how to manage them with a cost of additional complexity.
+SDL produces higher quality fonts by relying on heavy but powerful FreeType2 and Harfbuzz libraries.
+SDL includes a module for networking while raylib has no networking support.
+Both SDL and raylib allow loading and playing static and dynamic (streaming) audio data and manage the audio device. [55]
+When it comes to graphics, it all depends on the developer's expertise first and foremost, however SDL has a support for Vulkan and Metal APIs. [57]
+Because SDL has been around for more than 20 years and batttle-tested in many professional products, there are a lot of examples on how to use it, but in my experience
+many of them are outdated and have in mind that users are using dated technologies.
+Raylib, on the other hand, is around 10 years old and because most of its user-base are students and hobbyist, there are a lot more of fresh learning materials.
+Most importantly, while raylib can fit into the definition of a game engine, SDL on the other hand can be hardly called so as its main purpose is to provide low level access
+to audio, input devices and graphics hardware.
+
+#### 2.2.5 Bevy
+
+Bevy is a young and unorthodox game engine written in Rust, and it approaches game development in a rather radical way by adhering to ECS world model through and through.
+To understand why certain design choices were made, we need to understand Bevy's philosophy which Carter Anderson, its original author, shared on bevy's repository discussion page.
+First incentive, which I fondly support, is to be free and open source:
+"Games are a huge part of our culture and humanity is investing millions of hours into the development of games.
+Why are we (as game developers / engine developers) continuing to build up the ecosystems of closed-source monopolies
+that take cuts of our sales and deny us visibility into the tech we use daily?" [58]
+Second point is productivity, which is manifested in multiple ways:
+fast build/run/test loop, for which either a scripting language or a native language with fast compile times is required;
+using the same language for game development as the engine;
+and simplicity, being easy to use for common tasks without hiding a lot of lower-level details.
+Next important point is a world editor for scene management, which is absent from bevy because it is optional in Anderson's opinion.
+Lastly, an engine needs to be data-oriented to help a game run faster due to cache-friendliness and ease of parallelization, and to trivialize managing game states. [58]
+
+Bevy game is called `App`, and it consists of 3 fields: `World` stores all game's data, `Schedule` holds the systems that operate on this data
+and `Runner` controls the execution strategy of those systems.
+Perhaps the biggest feat of this engine is how brilliantly it tackles modularity.
+All engine features are implemented as plugins - collections of code that modify an `App`.
+Internal modules like the renderer or input handler as well as complete games are all implemented as plugins.
+This versatility allows game developers to only pick the features they want and replace any components they do not like.
+`DefaultPlugins` - a collection of 31 plugins that contains core engine features typically expected from a modern engine like rendering,
+asset loading, a UI system, windows and input. [59]
+This approach makes it challenging to compare bevy's architecture with Gregory's RTEA because instead having a clear dependency hierarchy of engine's components,
+every plugin acts as an independent block that can be added into a flat list of dependencies.
+Additionally, plugins themselves are quite small, and their functionality is pretty narrow.
+Overall, default plugins provide a bit of everything that RTEA's architecture requires:
+basic PLA, COR, well-pronounced RES, renderer modules, primitive animations, AUD and even GMP.
+
+Bevy has its own implementation of ECS model that encourages to break down game objects into the tiniest components.
+For example, a person entity can consist of a tag component `Person` and a `Name` components which is a struct with a string field,
+which then is queried like this `Query<&Name, With<Person>>`, meaning "iterate over every Name component for entities that also have a Person component".
+To represent globally unique data such as time or asset collections, bevy uses `Resource` - a type that can be inserted into a `World` as a singleton.
+Entities, components and resources are stored in a `World` - a data structure similar to a hash table that allows to perform insert, read, update and remove operations.
+Systems that perform structural changes to the `World` are called `Commands` -
+they cannot paralellized because they need to have mutable access to the data, which Rust compiler forbids and only allows one mutable or several immutable references.
+In order for system to communicate with each other and share some data, bevy uses `Events`.
+`Events` can be sent using the system parameter `EventWriter` and received with `EventReader` on the next frame.
+Otherwise, to send an event immediately there are `Triggers`, which implement the observer pattern, and can trigger other `Triggers` which will all be evaluated at the same time.
+
+Hytale's developers assure that despite being challenging to reason about at first, ECS can provide powerful game development tools. [52]
+Although there are many benefits of this model, it is important not to forget possible pitfalls that Bobby Aguelov has introduced to us previously. [47]
+Moreover, LogLog Games developer has come to the conclusion that many problems do not disappear even after gaining great proficiency with this model.
+"ECS is a tool, a very specific tool that solves very specific problems, and that does not come for free." [60]
+Another problem is that while for many engines ECS is an optional library that can be used or not, in Bevy the whole game is ECS and ECS only.
+Implementing UI widgets while being restricted by this paradigm is counterproductive and even "completely insane". [60]
+Considering that systems are parallelized and do not maintain consistent ordering across frames, one should specify a constraint on the order of execution to maintain consistency.
+But "for any non-trivial game what ended up happening is the user ends up specifying a ton of dependencies anyway,
+because things in a game tend to need to happen in a specific order." [60]
+
+Bevy's platform support is similar to SDL's: Windows, MacOS, Linux, Web, iOS and Android.
+Versatility is too early to judge because this engine is still in the early stages of development and some important features are missing. Documentation is sparse.
+Approximately every 3 months a new version is being released that contains breaking changes to the API.
+Graphics are promising despite the rendering engine being in an extremely early stage, and wgpu - bevy's underlying graphics API -
+is based on WebGPU standard which runs natively on Vulkan, Metal, DirectX12, and OpenGL.
+Contributing back and code reuse is deeply tight into bevy's philosophy and is greatly encouraged.
+Tools for this engine as well as complete games are created as plugins that can be easily integrated into a new project.
+This speeds up the process of writing boilerplate code and simplifies the procedure to get started.
+Unsurprisingly with this approach, the community is beyond lively, and an official page with community assets lists around 500 complete examples.
+"Bevy is not trying to out-compete other open source game engines. As much as possible we should be collaborating and building common foundations.
+Bevy is already benefitting massively from the efforts of the Rust gamedev ecosystem and we would love to pay it forward in whatever way we can." [58]
+
+As it stands now, Bevy is the head representative of Rust game development and arguably the best place to learn and practice ECS.
+The biggest lesson to take away from it is that the concept of describing a game as a collection of granular plugins is very powerful and allows for superb modularity,
+but the questions persists whether this level of modularity is deeply tight to ECS or can be achieved by other means.
+
+#### 2.2.6 Godot
+
+Easily the most popular open source game engine that has gained a lot of attention in recent years is Godot.
+As of time of writing, it has 87.4k stars and more than 2.5k contributors on GitHub.
+It describes itself as "a feature-packed, cross-platform game engine to create 2D and 3D games from a unified interface.
+It provides a comprehensive set of common tools, so that users can focus on making games without having to reinvent the wheel."[22]
+This description is general enough for any game engine out there, but the key points are "a set of common tools" and "without reinventing the wheel".
+Unlike most of the new engines/frameworks out there, including raylib and bevy, that lavishly encourage developers to reinvent all kinds of wheels,
+Godot's purpose, on the other hand, is to create a game in the fewest amount of steps possible.
+
+Although Unity's aim is seemingly the same - to provide a set of tools so that game developers can make a game fast, its approach to this problem is opposite of Godot's.
+Unity strives to be a general-purpose engine that Toftedahl and Engström describe in their Taxonomy [9] by providing virtually any feature that game developers might ever need,
+while Godot "intentionally does not include features that can be implemented by add-ons unless they are used very often". [22]
+Instead, some core functionality is moved to officially supported add-ons, that can be imported to a new project with a click of a button.
+By doing this, project maintainers have a smaller and cleaner code base to work with, and users have easier time contributing - less information to learn and less time compiling.
+Of course this also means that 3D workspace tools are kept at medium and things like terrain editor or complex skeletal animation tools will need to be imported as plugins.
+
+We skip comparing Godot's architecture with RTEA because Ullmann and colleagues have already done it and found all 16 out of 16 subsystems present,
+which include a world editor (EDI). [13]
+In fact a world editor is implemented so impressively that even bevy's creator can hardly help but to admire it [58], so we have no right taking a detour around it.
+Essentially a Godot editor is a game that runs on the Godot engine.
+There is a built-in code editor and many other features present in most of the engines' editors,
+but what is a fairly novel strategy is that Godot uses its own user interface toolkit.
+This means that users use the same code and scenes both to build games and to build plugins to extend the editor (without reloading the editor).
+This practice of using its own tool is called "eating your own dog food" which serves as a quality control for UI toolkit,
+because "editor itself is one of the most complex users of Godot's UI system." [22]
+Another feat of the editor is having an experimental support for Android and web browsers, which means that users can work on a game from virtually anywhere.
+
+Godot is written in C++ and for scripting it uses its own scripting language GDScript, designed specifically for the needs of game developers and game designers.
+It is also optimized for gameplay code with built-in types like Vectors and Colors and easy support for multithreading.
+But GDScript is not the only possible choice, there is support for C# with .NET as well other languages like C, C++, Rust, Swift and others via GDExtension.
+
+One last thing to keep in mind about the architecture is the use of `Servers` to provide multithreading capabilities.
+Most engines use job scheduling technique for concurrency, but it is a rather complex approach that sacrifice ease of use
+as it does not protect the code that is being modified in a separate thread, so users need to manually manage mutexes or semaphores.
+`Servers` solve this problem by not requiring threads to sync by the end of each frame -
+a `Server` with Logic and Physics can run on a current frame while Rendering can be processed a frame later. [62]
+By taking most of the responsibilities of concurrency on itself, users have easier time writing multithreaded code,
+but this tradeoff can potentially cause one-frame-off lags.
+
+For the game world model, instead of ECS, Godot uses OCM and makes heavy use of inheritance 
+(data-oriented optimizations are still present for physics, rendering, audio, etc., but they are separate systems and completely isolated).
+Original authors came to the conclusion that this leads to better usability for users while still being performant in most use cases -
+"Inheritance is more explicit - what would be implicit relationships between components in ECS, are now explicit in the inheritance chain.
+This makes it very easy to understand how the scene nodes are organized and what they can do, by just looking at the inheritance tree." [61]
+
+The smallest building block of a game is called `Node` and other game objects inherit from it. It contains both data and logic.
+One or more `Node`s can form a `Scene`.
+A `Scene` can be a character, a weapon, a menu or an entire level.
+It works the exact same way as a class in pure code, except that it can be designed both in the editor and in the code. [22]
+"Thanks to everything being nodes (and not entities with components) it becomes easier to reuse and combine everything as much as possible -
+Godot does not distinguish between scenes and prefabs.
+Scene is simply a bunch of nodes forming a tree, which are saved in a text file. Scenes can be instantiated and inherited." [61]
+When some event occurs to a `Node` (e.g. objects collided, something needs to be repainted, button was pressed, etc.), it can emit a `Signal` to send information to other `Nodes`.
+This feature allows them to communicate without being hard-wired in code.
+In Godot's game world model, `Node`s are just *interfaces* to the *actual data* being processed inside `Servers`, while in ECS the systems process entities (data) *directly*. [61]
+
+If `Node` is a base building block of a game then `Object` is a base building block of the engine - all other classes inherit from `Object`, including `Node`.
+A custom `Node` can be derived from `Object` with new properties, methods or signals which can drastically change the organization of a game.
+Another important class is `Variant`, which is a container that can store almost any engine datatype inside of it.
+This is what allows GDScript to be dynamically typed, and its main purpose is to communicate, edit and move data around rater then to store it persistently. [22]
+
+A list of supported target platforms is standard - Windows, Linux and MacOS desktops, Android, iOS and web.
+An achievement worth mentioning a second time is that an editor also runs on Android and Web browsers, not just on desktop.
+It is quite featureful and includes a code editor, an animation editor, a tilemap editor, a shader editor, a debugger, a profiler, and more.
+Godot also allows creating non-game applications thanks to the built-in UI system that can replace other toolkits like Qt, GTK or Electron. [22]
+The quality of graphics is obviously hardware dependent, but the engine supports 3 rendering methods with varying degree of graphics options diversity:
+*Forward+* will use Vulkan API with all features, *Forward Mobile* - is slightly handicapped version of former to allow drawing simple scenes faster,
+and *Compatibility* will use OpenGL backend which is more suitable for low-end devices.
+
+As a culmination for good design decisions, Godot's community is flourishing like no other and despite being much younger than Unity or Unreal, can already compete
+with them in terms of user-generated tutorials and free assets.
+Asset store hosts more than 3k officially supported plugins that either extend the editor's functionality or contain entire demo projects, all of which are free to use.
+"Godot is made by its community, for the community, and for all game creators out there." [61]
+Whenever users need a new feature to be merged into the engine's core, open discussions take place to decide whether a particular addition will benefit the most users first. [22]
+This openness to public prevents adding features that benefit only the corporate greed of shareholders like "Runtime Fee" in Unity. [36]
+
+Overall, Godot is the most pleasant engine that I had to work with. It is simple to learn and simple to use.
+Both the documentation and the API reference are incredibly informative without being too overwhelming, both of which can be accessed within the editor.
+To conclude, here is what Juan Linietsky, Godot's original developer, writes about his vision for the engine:
+"Godot as an engine tries to take the burden of processing away from the user, and instead places the focus on deciding what to do in case of an event.
+This ensures users have to optimize less in order to write a lot of the game code,
+and is part of the vision that Godot tries to convey on what should constitute an *easy to use game engine*." [61]
+
+
 ---
 Draft
 ---
 
-#### 2.2.3 Raylib
-
-- *Portability*
-- *Versatility*
-- *Graphics*
-- *Community*
-- *Game world model*
-
-#### 2.2.4 SDL2
-
-#### 2.2.5 OpenGL + glfw
-
-(Vulkan, DX12)
-
-#### 2.2.6 Bevy (webgpu)
-
-Bevy philosophy
-https://github.com/bevyengine/bevy/discussions/8107
-> Ideally the engine is written in the same language that games are.
-> Being able to run an IDE "go to definition" command on a symbol in your game and hop directly into the engine source is an extremely powerful concept.
-
-- *Portability*
-- *Versatility*
-- *Graphics*
-- *Community*
-- Game world architecture
-
-At times, some of these features (ECS) can be challenging to reason about, but once understood and mastered, they provide extremely powerful game development tools. [52]
-
-#### 2.2.7 Godot
-
-Godot engine describes itself as
-"a feature-packed, cross-platform game engine to create 2D and 3D games from a unified interface.
-It provides a comprehensive set of common tools, so that users can focus on making games without having to reinvent the wheel.
-Games can be exported with one click to a number of platforms, including the major desktop platforms (Linux, macOS, Windows),
-mobile platforms (Android, iOS), as well as Web-based platforms and consoles."
-Essential, what Godot is a collection of common tools that are used to create games, that can handle the porting for a game developer.
-Here, an engine is something, that contains software components, that can be re-used to make a new game.
-In Gregory's architecture, porting responsibilities take Platform Independence Layer (PLA)
-Godot is by far the most pleasant and complete General Purpose engine proposed by taxonomy.
-
-- *Portability*
-- *Versatility*
-- *Graphics*
-- *Community*
-- Game world architecture
-
-#### 2.2.8 Mach
-
-- *Portability*
-- *Versatility*
-- *Graphics*
-- *Community*
-- Game world architecture
-
-Doom3 Source code review: https://fabiensanglard.net/doom3/index.php
-
-#### 2.2.9 Modding & code/asset reuse
+#### 2.2.7 Modding & code/asset reuse
 
 ANENLOCO-2
 
@@ -958,7 +1233,7 @@ https://www.reddit.com/r/gaming/s/kFl4gmhn06
 Forking game worlds to create new variations of it with as little boilerplate as possible; fast and easy.
 
 
-#### 2.2.10 **Solution/Takeaways** TLDR protocol + exploit that an engine is just the reusable tools
+#### 2.2.8 **Solution/Takeaways** TLDR protocol + exploit that an engine is just the reusable tools
 
 ANENLOCO-3 (game genre)
 Game genre manifests itself in the implementation of GMP and Gameplay-specific subsystems.
@@ -1002,6 +1277,10 @@ A protocol acts like a skeleton, or a blueprint, that help to keep the whole thi
     Our task, as academics, should be to look at designs and find commonality, to allow us to try to piece together a ‘better design’.
 
 Graph that engine flexibility is reciprocal of game's certainty - x^-1 like hyperbola
+
+DCC module should be accounted for in an engine.
+On example of raylib, some of the external dependencies responsible for reading specific file formats can be compiled out and reduce the library's binary size
+as well as reduce the amount of available functions in its API.
 
 ### 2.3 Programming languages analysis
 
@@ -1060,9 +1339,33 @@ W. Zhang, D. Han, T. Kunz and K. M. Hansen, "Mobile Game Development: Object-Ori
     Therefore, we conclude from our experiments that OO should be used with great care in the development of mobile games,
     and that structural programming can be a very competitive alternative.
 
+"ECS in Rust has this tendency of turning from something that is considered a tool in other language to become almost a religious belief. Something that should be used because it is pure and correct, and because doing that is the right way." [60]
+
+Rust is a safe language which can sacrifice the speed of dev cycel, although not the speed of exectutable.
+[49]
+
+    Gamedev is all about speed.
+    1. We want nice architecture so the code is easier to understand over the lifetime of the project. (Long term development speed)
+    2. We want fast runtime performance. (Game's execution speed)
+    3. We want to get today’s features done quickly.(short term development speed)
+
+The difference between SE and gamedev is that games are all about speed, while software gives more emphasis on scalability, maintenance and safety
+
+Productivity:
+Fast build/run/test loop, for which either a scripting language or a native language with fast compile times is required;
+using the same language for game development as the engine;
+and simplicity - being easy to use for common tasks without hiding a lot of lower-level details. [58]
+
 *Articles & blog posts*
 Since Zig is a young language and hasn't even reached version 1.0, there's not enough research,
 so the information that I've gathered here is mostly from technical articles and blog posts, as well as from my ken experience.
+
+Zig is really three things:
+- Programming language
+- Build system (build.zig) replacing makefiles/cmake/ninja/etc
+- C/C++ compiler with an emphasis on cross-compilation
+You can write a build.zig file in Zig, describing how to build your C/C++ project using Zig as the toolchain.
+Thanks to Zig’s lazy code evaluation and lazy dependency fetching, you really only pay for the parts you use.
 
 [17] Zig Rust Go C++
 
@@ -1212,7 +1515,7 @@ https://blog.sigma-star.io/2024/01/people-dont-understand-oop/
     "Objects are collections of operations that share a state."
 
 // TODO read
-https://loglog.games/blog/leaving-rust-gamedev/
+[60] Leaving rust gamedev after 3 years
 
 [46] Hats And Rust 
 
@@ -1314,15 +1617,20 @@ Note about Linux as a more pleasant developing environment.
 Potential of NixOS and declarative OSes might help with reproducing development environment.
 Any professional needs a sharp tool. A software developer needs to handle his editor the same way an NB player handles a basketball.
 Benefits of modal editing and nvim.
-"Open-source development platforms are available, but developers must customize them according to the required functionality." [20 5.2.2.3]
+"open source development platforms are available, but developers must customize them according to the required functionality." [20 5.2.2.3]
 "...Windows was not meant for the type of development necessary for video games.
 Microsoft Visual Studio was built for Visual Basic and C# mainly, not for C++, but the only viable C++ compiler and environment on Windows remains Visual C++." [7]
 
 ### 2.4. Practical example
 
+How to write better (game) libraries:
+https://handmade.network/forums/articles/t/7138-how_to_write_better_game_libraries
+
 Building an engine and a game and constantly question when to abstract or not, and which parts do I want to reuse for later projects.
 Creating the best possible reusable components.
 "Reusable components are what we would now call game engines". [15]
+
+SDL provides networking module. I think networking should be a part of every engine, or at least an official plugin.
 
 [22] Don't create yet another average engine. What is its philosophy? Why is there a need for this specific engine?
 
@@ -1332,6 +1640,7 @@ Creating the best possible reusable components.
     This all stems from their respective design philosophies.
 
 Goal: remove programmers from a picture as much as possible, keeping designers close to the game. [53]
+blend a game and and engine into a one contiguous stack.
 
 [52] Writing complex systems from scratch yourself is inefficient.
 
@@ -1347,6 +1656,12 @@ glTF was designed specifically for real-time 3D graphics and is optimized for ef
 On the other hand, USD was designed for large-scale, complex productions that require sophisticated data management and cross-application collaboration.
 glTF is designed for fast performance and low overhead, making it ideal for use in real-time graphics and gaming.
 USD, on the other hand, is designed to support large-scale, complex productions, and may have a higher overhead compared to glTF.
+
+ECS is not "one size fits all" solution for evey game, however certain game genres benefit from ECS much more then others, in particular:
+- City builders (lots of things going on).
+- Sandboxes (lots of tiny things need processing every frame).
+- Some strategy games (while not the majority, some can use thousands or dozen of thousands of game units at the same time).
+- Other AAA games with lots of content going on. [61]
 
 [50]
 
@@ -1364,7 +1679,7 @@ Write 2D games: Snake and Breakout and an 3D scene with a player.
 Make them run on Windows.
 
 A note about the EUPL licencse.
-"open-source is the right path to follow.
+"open source is the right path to follow.
 What appears to be a "finished" game can always be modded and reproduced into a new product. Thus, a game is also a game engine.
 It democratizes and allow a soft learning curve for beginners. Also, it will allow the creation of more diverse games."[1 6.4]
 [7] mentions domain specific knowledge required for engine development. Open source game/game engine with clearly distinct modules is the optimal environment for
@@ -1405,6 +1720,10 @@ Need teach game programming concepts without lumping them to any particular lang
 Zig is a fitting choice for a game engine language as because of its ease of porting to different platforms and C interop, whic is imprtant because C is the language of
 low level systems, drivers and graphics and is ubiquitous.
 The downside is immaturity.
+
+Whenever new technologies come out, it is hard to make an objective evaluation how good it will fit in a gamedev.
+Their design and technical demos might look extremely promising, however it is hard to test it in an actual large game because a game is already settled with its tools and will not transition to a new tech just for a small list of benefits.
+Meanwhile smaller games with faster development cycle that committed to using those technologies have smaller scope and are less likely to face the same kind of problems, therefor unable to give a difinituve answer whether that technology is actually usable in a large scale game
 
 ### Discussion
 
@@ -1456,11 +1775,11 @@ Game Design document need to specify more information about the game systems, so
     and it's your programming language, it's your production pipeline, it's the DCC tools you use, all of that.
 
 The line between an engine and a game is indeed blurry.
-There are many open-source engines, but not many open-source high-grade games,
+There are many open source engines, but not many open source high-grade games,
 which makes studying this topic particularly challenging, as multiple previous studies have highlighted.
 Engines by themselves are useless, and only serve as a base for the game.
 Thus, to properly understand how to design a game engine, it is necessary to study them in conjunction with full-scale games made with selected engines.
-An open-source general purpose game can also serve as a living documentation and example of best-practices in game development (ANENLOCO-5).
+An open source general purpose game can also serve as a living documentation and example of best-practices in game development (ANENLOCO-5).
 
 Game development does not start from vacuum.
 Developers expand existing engine with additional code and assets to make a game.
@@ -1472,15 +1791,7 @@ Not only it is more useful for the actual gamedev in big studios, it also is a g
 None of the contemporary game engines take the responsibility of tackling the problems faced during pro-development stage. GDD integrated schema?
 
 There is a great amount of game engines out there, which we did not cover in this paper.
-One of them is open-source Open 3D Engine (O3DE), which boasts a set of features comparable to Unreal and receives funding from many large companies.
-
-[49]
-
-    Gamedev is all about speed.
-    1. We want nice architecture so the code is easier to understand over the lifetime of the project. (Long term development speed)
-    2. We want fast runtime performance. (Game's execution speed)
-    3. We want to get today’s features done quickly.(short term development speed)
-
+One of them is open source Open 3D Engine (O3DE), which boasts a set of features comparable to Unreal and receives funding from many large companies.
 
 The end purpose of Dnipro is not to create yet another engine, but 1) create an engine protocol that describes his engine components fit together; 2) create a system which determines what components will be needed for a game based on a provided GDD; 3) and  a system that stitches those components together and provides a final API designed to produce a very specific kind of game via GMP module. 
 
@@ -1541,3 +1852,12 @@ Instead of giving all the tools to game developers, they are given only the ones
 51. The Wrong Abstraction: https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction
 52. Hytale's Entity Component System: https://hytale.com/news/2024/6/summer-2024-technical-explainer-hytale-s-entity-component-system-oPwpCAMdI
 53. Data-Driven Object System (2002): https://youtu.be/Eb4-0M2a9xE?si=f-A0M-HK31hbZ5eY
+54. Raylib architecture: https://github.com/raysan5/raylib/wiki/raylib-architecture
+55. raylib vs SDL - A libraries comparison: https://gist.github.com/raysan5/17392498d40e2cb281f5d09c0a4bf798
+56. u/amdreallyfast: https://www.reddit.com/r/opengl/comments/5m8iyp/comment/dc4h5g9/?context=3
+57. Introduction to SDL 2.0: https://wiki.libsdl.org/SDL2/Introduction
+58. Why create Bevy when INSERT-GAME-ENGINE-HERE exists? https://github.com/bevyengine/bevy/discussions/8107
+59. Bevy documentation: https://docs.rs/bevy/0.14.0/bevy/index.html
+60. Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/
+61. Why isn't Godot an ECS-based game engine?: https://godotengine.org/article/why-isnt-godot-ecs-based-game-engine/
+62. Why does Godot use Servers and RIDs?: https://godotengine.org/article/why-does-godot-use-servers-and-rids/
