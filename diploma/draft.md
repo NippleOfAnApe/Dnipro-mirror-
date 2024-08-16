@@ -125,9 +125,9 @@ Teams that tried incorporating Model-Based development report some success:
 This is done with high-level models such as structure and behavior diagrams as well as control diagrams.
 ... it allows management to gain at least a rudimentary understanding of the game design
 and help alleviate the communication problems encountered in previous development methodologies."
-This probably means that the plague of scrum masters is inevitable.
+This bears a threat of potential plague of scum masters in the field of game development.
 Another important practice is using a Game Design Document.
-[20] describes common problems faced during pre-production, production and post-production phases.
+[20] describes in thorough details common problems faced in pre-production, production and post-production phases.
 
 [1] explores whether game engines share similar characteristics with software frameworks by comparing 282 most popular open source engines and 282 most popular frameworks on GitHub.
 "Game engines are slightly larger in terms of size and complexity and less popular and engaging than traditional frameworks.
@@ -507,12 +507,12 @@ Finally, we expand on the potential responsibilities of a general purpose engine
 debating which functionalities should or should not be incorporated into a game engine's core design and whether game modding should be treated as a part of the game development.
 
 Questions, or rather topics of concern, raised by Anderson et al. are as follows:
-1) The lack of standardized ‘game development’ terminology. How to properly define any given engine and each of its components as well as other aspects relating to game development?
+1) The lack of standardized "game development" terminology. How to properly define any given engine and each of its components as well as other aspects relating to game development?
 2) What is a Game Engine? Where's a line between a complete game and an engine that was used building it?
 3) How do different genres affect the design of a game engine? Is it possible to define a game engine independently of genre?
 4) How do low-level issues affect top-level design?
 Are there any engine design methods that could be employed to minimize the impact of the future introduction of new advancements in computer game technology?
-5) Best Practice: Are there specific design methods or architectural models that are used, or should be used, for the creation of a game engine? [14]
+5) Best Practices: Are there specific design methods or architectural models that are used, or should be used, for the creation of a game engine? [14]
 
 Since we will be revisiting those questions multiple times throughout this section, and we do not want to confuse them with the research questions of this paper,
 we need to come up with a convenient acronym for them.
@@ -556,7 +556,10 @@ Lastly, the icing on the cake, a cherry on top is the World Editor (EDI) - a pla
 Consequentially, to have a visual world editor an engine needs to be logically assembled, which makes this submodule to reside at the top of the dependency hierarchy.
 It can be architected either as an independent piece of software, built on top of lower layer modules, or even be integrated right into a game.
 A world editor allows to visually create and manage both static and dynamic objects, navigate in a game world, display selections, layers, attributes, grids etc.
+Some examples of how world editors that are integrated into games are shown bellow.
 Weirdly, Gregory classifies it as a part of the tool suite.
+
+![https://www.reddit.com/r/gaming/s/kFl4gmhn06](editors.jpeg)
 
 Runtime components are what makes up the rest of the typical engine, and normally they are structured in layers with a clear dependency hierarchy,
 where an upper layer depends on a lower level.
@@ -635,6 +638,10 @@ Apart from bgfx, there are countless game-related frameworks varying in caliber 
 
 While Gregory's RTEA is not the only framework for game engine design, as was pointed out by [14],
 its comprehensive and detailed delineation of components makes it an extremely valuable model for understanding the complex workings of modern game engines.
+An alternative to splitting game development tools into engine components (RTEA) and tool suite (DCC) is proposed by Toftedahl and Engström in their "Taonomy of game engines".
+Engine is split into 3 groups: 1) Produt-facing tools which is esentially most of the engine's functionality; 2) User-facing tools allow designers and game developers
+to create game content; 3) Tool-facing tools are the plugins that bridge different components of an engine for a smoother workflow. [9]
+
 Having explored the basis of RTEA, we can turn our attention to game world architecture (model) — the design and communication patterns of objects within the game itself.
 While engine architecture focuses on the underlying systems that power the game, game world model deals with the structure of the game's content and logic.
 This distinction is crucial in answering ANENLOCO-2, "Where is the line between a complete game and the engine used to build it?" [15].
@@ -1154,133 +1161,126 @@ To conclude, here is what Juan Linietsky, Godot's original developer, writes abo
 This ensures users have to optimize less in order to write a lot of the game code,
 and is part of the vision that Godot tries to convey on what should constitute an *easy to use game engine*." [61]
 
+#### 2.2.7 Modding & code/asset reuse
+
+Ultimately, when talking about long term success of a game, we cannot overlook the importance of modding, as this is what allows a game to avoid stagnation and stay alive.
+There are numerous factors to consider whether adding modding tools is a good idea or not, but it is something to be aware of nonetheless, especially when we talk about
+the relations between a game and its engine.
+
+As Gregory mentioned, Game-Specific Subsystems is where a game starts to be distinct from the engine,
+and it contains the tools with which gameplay developers and designers work to build the actual game.
+In essence, what they are doing can be considered as modding,
+because GMP (Gameplay Foundations) module already outlines a game's genre, how a game world should be structured and how game objects inside it should be managed.
+If a game was to introduce modding capabilities, it would revolve around Game-Specific Subsystems so that players can either add new game content in a form of game objects,
+or to add new logic to those objects.
+Conceptually speaking, this turns a game into a special-purpose game engine as per "Taxonomy of game engine" [9],
+which might be frightening to some studios because of the high risk of violation of intellectual property rights.
+The best example of this occurrence is how Dota was born as a Warcraft 3 mod over which Blizzard had no legal rights. [63]
+Yet despite this minor inconvenience, modding usually results in a net benefit for game development studios, as it ensures that they have a clear understanding of
+the desires and needs of the player base.
+For instance, in the game Elden Ring, a popular mod "Seemless Co-op" has made a game director Hidetaka Miyazaki
+consider whether they want to implement a start-to-finish co-op experience in their future games. [64]
+
+So which traits should a game have in order to achieve modding success?
+We can find the answer in Lufa's work "Modding Heaven: When Games Become Engines". [44]
+He discerns three major characteristics:
+1. Support - how much modding support is built into a game; do developers provide any tools for this?
+2. Nature - sandbox or open world versus fixed path games? How suitable is the game's environment to a new and experimental content?
+3. Passion - are gamers passionate about a game to create new content or fixes for it?
+Even unmoddable games can still be reverse engineered (Dark Souls or Minecraft) if players like it enough.
+
+A game can reach "Modding Heaven" even when not all traits are present.
+Original Doom, for example, was designed to be modded and reused, and community was passionate to work on it even despite the nature of the game being quite linear and limiting.
+Even 30 years later the community is still very active producing staggering variations of the game, from boxing to a lawn mower simulator, from a trench warfare to an RPG fantasy.
+Minecraft on the other hand has an excellent nature - simple game progression inside an infinite and random world that make it easy to place a new content without conflicts.
+Even despite the developers not providing any official modding tools, players became engaged enough to produce all kinds of modifications.
+
+But the most notorious moddable game is Skyrim. It has got all three traits that ascended a game to "Modding Heaven".
+From the very inception it was planned to be shipped with modding tools in a shape of a Creation kit - the exact same instrument used by Bethesda developers to build it.
+Open world RPG design favors exploration and do not enforce a fixed progression path. Huge world makes it possible to add new assets without conflicts.
+However, it was also lucky and came out at the right time to get a lot of attention from fans of Game of Thrones and Lord of the Rings.
+As a result, it is currently the most popular game on Nexus Mods (website to share game mods) with more than 5 billion downloads and 94 thousands mods.
+It is possible to create completely new experiences to such extent that even small indie studios make Skyrim based games and writers use it to create interactive stories
+that win Writers' Guild award, simply by making a mod with an interesting story. [65]
+Reddit user u/Capital-Feed-3968 demonstrates the power of Skyrim modding in a single picture titled "I don't know what game I'm playing anymore".
+![Figure 2](mod.png)
+
+Lufa concludes with a hypothesis that large modding scenes might be the result of content vacuum, and that a game can only achieve a "Modding heaven" if its vanilla base is broken.
+It is a reasonable assumption considering that both Skyrim and Minecraft were rather dull and buggy when first released,
+but Terraria, despite standing very close to Minecraft in all 3 points, is not in "Modding Heaven".
+Unlike Minecraft, Terraria's base game is packed with content, has a smooth gameplay, and mods there do not create brand-new experiences but only extend the existing game.
+
+Game development companies are aware of the importance of user-generated content.
+This is why CD Projekt Red has released REDkit editor for Witcher 3 which allows users to create new experiences and modify all aspects of the base game
+using "refurbished versions of the same tools which were used by the RED developers". [66]
+Paradox studio's engine for Hearts of Iron has been designed to be used by both game designers and modders alike:
+"We want to put as much power as we can into the hands of the people who are making content. They shouldn’t have to ask a coder for help." [48]
+Similar stance have the creators of GenieLabs who believe that it is easier to allow players to create game content by themselves rather than spending their budget on a new DLC. [34]
+Epic Games take one step forward and introduces monetary compensations for people who create popular "islands" using Unreal Editor for Fortnite. [40]
+And let us not even start with games like Roblox and Garry's Mod that act as special-purpose engines and rely on players to create actual gameplay.
+
+To sum it up, game modding is very important and often overlooked.
+It can significantly extend a game's lifespan, but only if it has the right nature and has manged to get the attention of the right audience.
+Players can create new experiences on top of a base game, with the downside being that developers do not get to decide what the community should work on.
+Especially if the game is a multiplayer, and developers host servers it can quickly become a charity.
+However, they should not get discouraged because in case of success, those developers gain a loyal community and achieve a positive brand recognition.
+
+#### 2.2.8 Takeaways
+
+To conclude this section, here are four critical observations and their consequences.
+
+1. It is meaningless to draw a line between a game and its engine since a game can become its very own engine with the help of modding tools.
+
+Certain projects like Roblox, Unreal Editor for Fortnite or Garry's Mod make the process of game development an actual gameplay.
+Furthermore, by knowing that a genre manifests itself in the functionality provided by GMP module and
+concrete implementations of Game-specific subsystems, we can further elaborate ANENLOCO-3:
+not only the games of different genre can be produced within the same engine, but different genres can live in a single game (or rather in a single game world).
+
+One conceivable implication of this inference is that video game distributors like Steam or Epic Store might
+morph into an application with the gameplay and sell games as add-ons for their game worlds.
+The benefit of this for game developers is that potential buyers are more likely to stumble and try out the game's demo as there is less overhead between players and the game.
+
+2. Open-source game engines tend to focus on production phase problems.
+
+Problems at that phase account for 45.27% of all game development problems, while at pre-production stage the percentage drops to 39.18%. [20]
+This is still a sizable chunk which includes requirements specifications, game design documentation, project management, prototyping, validation and verification,
+and of course asset creation in third party software. [7]
+
+The reason for this negligence was already hinted by [1] when they found out the motivation behind engine developers.
+They do it for the sake of learning, and the need to create actual games with them is very often absent.
+That's why many game engines stay oblivious to those problems - because those concerns are irrelevant to their authors.
+
+3. Engine architecture can be designed in many different ways.
+
+And this is what ANENLOCO-1 stresses about - there is no universal way to describe how game engine components should communicate with each other.
+All available learning resources focus on the *implementation* of those components at the lowest level. [15]
+This lack of universal *Game System Description Language* [20] is of prime concern and should be addressed sooner rather than later.
+
+This issue is further exacerbated by the fact that game engines, especially older ones, act like a Ship of Theseus -
+not all components age at the same speed, and many parts are being replaced with another, while continuing to makeup the same engine.
+"Even the ubiquitous Unreal Engine 4 is still built on a foundation that started with the first Unreal, which came out in 1998."[21]
+To ensure that one component can be safely switched with another, one needs to clearly define inputs and outputs of that component.
+
+A reasonable solution is to approach it similarly to communication protocols like XMPP or IRC for messaging, or Wayland for display clients communication.
+Designing and ratifying game engine specifications is definitely not a trivial task, but it might reap some benefits in the long term.
+The protocol is language agnostic and only describes the engine systems at a high level.
+Building a game engine on top of a protocol and using third-party libraries that implement that protocol would significantly help with managing the dependency tree,
+as well as with the future extension of the engine feature set, which consequently improves modding capabilities of games built with that engine.
+
+4. Engine flexibility is reciprocal of a game's certainty.
+
+A visual relation between the two is shown below and is essentially a hyperbolic function.
+On one end of a spectrum there are "Open world voxel-based games", as an example.
+They can be created with virtually any kind of software tools and leave a lot of room for creativity for developers.
+Thus, an engine for this kind of game is extremely flexible and can take any shape because the game does not require anything specific from it.
+On the other end of the spectrum there are special-purpose engines and game mods that create a new experience atop of the base game,
+like Warcraft 3 as the engine for Dota, or Arma 3 as the engine for DayZ and PlayerUnknown's Battle Royale.
+
+![Engine formula](formula.jpg)
 
 ---
 Draft
 ---
-
-#### 2.2.7 Modding & code/asset reuse
-
-ANENLOCO-2
-
-Modding and "the need of a uniform “game language”, but in a much wider context – involving the community aspects of communication as well"[9].
-Adding to your game the ability to mod it is like making your game a special-purpose game engine. Minecraft Skyrim and Roblox.
-Moding allows to create a new game without creating many assets or writing a lot of code.
-"Bethesda does not release games, it releases modding toolkits" - u/Vellarain
-"I don't know what game I'm playing anymore."
-![Figure 2](mod.png)
-A popular Elden Ring mod Seemless Co-op made a game director Hidetaka Miyazaki consider whether they want to implement a start-to-finish co-op experience in their future games.
-https://www.pcgamer.com/games/rpg/fromsoftwares-says-elden-rings-seamless-co-op-mod-is-definitely-not-something-we-actively-oppose-and-may-even-consider-ideas-like-that-with-our-future-games/
-wiki for acessing game information inside a game directly.
-
-Game consists of GOs and their logic (rules and restrictions), therefore game modding is split into add/remove GOs (content) and add/remove logic (rules and restrictions).
-
-[15 2.2]
-
-    2.2 What is a Game Engine: Where is the boundary between game and game engine?
-    "collection of modules of simulation code that do not directly specify the game’s behaviour (game logic) or game’s environment (level data)"
-    game engine code vs game code
-    Where's a line between a complete game and an engine that was used building it?
-
-[34]
-
-    The creators of GenieLabs say that it’s much easier for game developers to allow players to create game content by themselves rather than work for years on thousands of DLCs.
-    Also, this approach helped to extend the lifespan of existing games by 33%
-
-[40]
-
-    ...if players love your islands, you’ll be eligible to receive payouts based on their engagement.
-
-[44]
-
-    3 traits that determine a game's modability:
-    1. Support - how much modding support is built into a game; do developers provide any tools for this?
-    2. Nature - sandbox/open world or a fixed path game? How suitable is game's environment to a new and experimental content?
-    3. Passion - are gamers passionate about a gameto create new content/fixes for it? Unmodable game can still be reverse engineered (Dark Souls or Minecraft)
-    If all 3 are present then a game becomes a its very own game engine.
-    Doom (1 and 3, but 2 is meh)
-    Even to this day, Doom moding community is very active, and have made truly huge variations of this game, from boxing to a lawn mower sim,
-    from a trench warfare to an RPG fantasy.
-    Minecraft (not 1, but 2 and 3) Infinite and random world make it easy to place a new content wothout conflicts.
-    Simple progression = plenty of room for potential custom progres
-    Skyrim (1, 2, 3) Creation kit = same tools used by devs. Open exploration/progression. Writers use it to experience a novel interactively (forgotten city), or whole team
-    can use it to make a new game.
-    Terraria (no 1, 2, 3) not many mods because vanila game is packed with content. Mods within it do not create brand new experiences.
-
-    Author hypothesizes that a "large moding scenes might be the result of content vacum. Maybe a game can only achieve a modding heaven if its vanila base is broken."
-
-[48]
-
-    New Clausewitz-Jomini alliance is the inclusion of proper tools, which will help both designers and moders.
-    For the designers, the new tools mean that they can focus on what they’re good at, specialities like art or writing.
-    We’ve completely reworked the GUI system. Modders should be able to make super-fancy UIs without editing any code in the game.
-    I think it comes down to that: We want to put as much power as we can into the hands of the people who are making content. They shouldn’t have to ask a coder for help.
-
-CD Prokekt Red also released REDkit moding tool to let players mod Witcher 3. https://cdprojektred.atlassian.net/wiki/spaces/W3REDkit/pages/6324268/General+information
-REDkit editor "allows users to create new experiences and modify all aspects of The Witcher 3 using refurbished versions of the same tools which were used by the RED developers"
-Roblox is built on a premise of user-generated content.
-
-Gregory's Game-Specific Subsystems is a moddable part of a game, that blends a game with its engine.
-
-[15]
-
-    one characterization of progress in programming languages and tools has been regular increases in abstraction level –
-    or the conceptual size of software designers building blocks
-
-Map editors inside games to let players create new experiences
-https://www.reddit.com/r/gaming/s/kFl4gmhn06
-
-Forking game worlds to create new variations of it with as little boilerplate as possible; fast and easy.
-
-
-#### 2.2.8 **Solution/Takeaways** TLDR protocol + exploit that an engine is just the reusable tools
-
-ANENLOCO-3 (game genre)
-Game genre manifests itself in the implementation of GMP and Gameplay-specific subsystems.
-But the next logical question arises: can one game combine more than one genre, and of so, how does it affect the structure of GMP subsystem?
-
-ANENLOCO-4 (low-level issues -> top level design) & ANENLOCO-2 (game vs engine).
-
-One reasonable solution to this hurdle (ANENLOCO-1) is to design a universal game engine protocol that describes every single component that can possibly be a part of the engine,
-and requiring the authors of software frameworks to use certain parts of this protocol as a template for their libraries.
-Protocol is language agnostic and describes the engine systems at a high level.
-Writing a game engine on top of a protocol and using SDKs that implement that protocol as well would significantly help with managing the dependency tree
-as well as with the future extension of the engine feature set, which consequently improves modding capabilities of games built with that engine.
-Define which data can be accessed from which componet/object to avoid the web of implicit dependencies.
-
-At what point to start introducing abstraction layers?
-What specifications/responsibilities should an engine architecture describe?
-
-[49]
-
-    Simplicity. A good solution isn’t an accretion of code, it’s a distillation of it.
-    An elegant solution - small bit of logic that still correctly covers a large space of use cases.
-
-"the manner in which low-level issues influence architectural design is intrinsically linked to the fact that technology changes at a very fast rate" [15]
-
-"As one game developer pointed out to me this morning, even the ubiquitous Unreal Engine 4 is still built on a foundation
-that started with the first Unreal, which came out in 1998."[21]
-
-Theseus ship. An engine is never in a perfect state, and not all components age with the same speed.
-It should be possible to unplug gameplay related subsystems and plug them into a completely different engine with other components present.
-With new technological advancements, new software development practices, new user demands, a game and its engine are supposed to adapt to it all.
-A protocol acts like a skeleton, or a blueprint, that help to keep the whole thing together and to switch certain parts of it without a complete project rewrite.
-
-[15] ANENLOCO-1 stresses that previous researches have never paid due attention to the definition of links between engine components.
-
-    The available research has mainly focussed on game engine subsystems, such as rendering, AI or networking.
-    However, issues regarding the overall architecture of engines, which connects these subsystems, have merely been brushed over.
-
-    Books on the subject tend to only briefly describe the high-level architecture before plunging straight down to the lowest level
-    and describing how the individual components of the engine are implemented.
-
-    Our task, as academics, should be to look at designs and find commonality, to allow us to try to piece together a ‘better design’.
-
-Graph that engine flexibility is reciprocal of game's certainty - x^-1 like hyperbola
-
-DCC module should be accounted for in an engine.
-On example of raylib, some of the external dependencies responsible for reading specific file formats can be compiled out and reduce the library's binary size
-as well as reduce the amount of available functions in its API.
 
 ### 2.3 Programming languages analysis
 
@@ -1304,6 +1304,11 @@ Mention the importance of a multithreading module in the engine. So that doing c
 
 The effects of object-oriented technology on performance, executable file size, and optimization techniques for mobile games
 and suggested that object-oriented technology should be used with great care because the structured programming in game development is highly competitive.[20 5.2.2.5]
+
+[15]
+
+    one characterization of progress in programming languages and tools has been regular increases in abstraction level –
+    or the conceptual size of software designers building blocks
 
 [12 1.6.15.1]
 
@@ -1678,6 +1683,8 @@ Pull all the dependencies and compile without the errors.
 Write 2D games: Snake and Breakout and an 3D scene with a player.
 Make them run on Windows.
 
+Forking game worlds to create new variations of it with as little boilerplate as possible; fast and easy.
+
 A note about the EUPL licencse.
 "open source is the right path to follow.
 What appears to be a "finished" game can always be modded and reproduced into a new product. Thus, a game is also a game engine.
@@ -1694,6 +1701,11 @@ A 3D modeler is more productive with his 3D modelling software than with any sor
 An engine becomes more useful when more games has been done with it.
 So that a game can re-use the maximum amount of engine features that were introduced by a previous game in the same genre.
 That's how Unity became so popular. As more people started to make games with it, more assets in marketplace and more tutorials on how to make games in it.
+
+[49]
+
+    Simplicity. A good solution isn’t an accretion of code, it’s a distillation of it.
+    An elegant solution - small bit of logic that still correctly covers a large space of use cases.
 
 Development of a game should start from the highest point, not the lowest.
 For example, a new shooter game should start from doing minor tweaks to the another "completed" shooter game, changing skybox, or skins of the enemies.
@@ -1759,9 +1771,15 @@ Data mining is used extensively to analyze how players are interacting with the 
 
 How to describe the scene? (triangular meshes + lights)
 
+At what point to start introducing abstraction layers?
+
+Research how to implement pre-production tools into game engine.
+
 ## 4. Conclusion
 
 Game Design document need to specify more information about the game systems, so that an engine has more information to work with.
+
+Don't forget about pre-production phase: management, requirements specifications, prototyping, GDD.
 
 [39]
 
@@ -1774,7 +1792,6 @@ Game Design document need to specify more information about the game systems, so
     It's not only for the 3d editor used to build your levels, but it's your build system,
     and it's your programming language, it's your production pipeline, it's the DCC tools you use, all of that.
 
-The line between an engine and a game is indeed blurry.
 There are many open source engines, but not many open source high-grade games,
 which makes studying this topic particularly challenging, as multiple previous studies have highlighted.
 Engines by themselves are useless, and only serve as a base for the game.
@@ -1788,14 +1805,23 @@ Teaching game development, likewis, should bit focus on how to make things from 
 For example, teaching character animations should also explain which part of the engine/game is responsible for animating, and how to add your animation to an existing character.
 Not only it is more useful for the actual gamedev in big studios, it also is a good way to give a quick and visual feedback in a form of a working gameplay
 
-None of the contemporary game engines take the responsibility of tackling the problems faced during pro-development stage. GDD integrated schema?
-
 There is a great amount of game engines out there, which we did not cover in this paper.
 One of them is open source Open 3D Engine (O3DE), which boasts a set of features comparable to Unreal and receives funding from many large companies.
 
-The end purpose of Dnipro is not to create yet another engine, but 1) create an engine protocol that describes his engine components fit together; 2) create a system which determines what components will be needed for a game based on a provided GDD; 3) and  a system that stitches those components together and provides a final API designed to produce a very specific kind of game via GMP module. 
-
 Instead of giving all the tools to game developers, they are given only the ones that their game requires
+
+Best engine is the one with which you need to interact as little as possible, and write as little code as possible,
+because ideally it should already ship with the code your game needs, based on GDD.
+Considering that a game engine is a set of reusable tools, it should be possible to arrange them in an order that is optimal for specific game requirements.
+That's why PROTOCOL is so fucking important damn it.
+"Our task, as academics, should be to look at designs and find commonality, to allow us to try to piece together a ‘better design’." [15]
+Therefore, DCC module should be accounted for in an engine as it will allow developers to create game content in specialized software and not force them to learn a specific engine.
+And the benefit for programmers is the reduced API that is easier to learn and use:
+Another goal of software architecture is to minimize the amount of knowledge a developer is required to have before he can make progress. [49]
+
+The end purpose of Dnipro is not to create yet another engine, but 1) create an engine protocol that describes his engine components fit together;
+2) create a system which determines what components will be needed for a game based on a provided GDD;
+3) and a system that stitches those components together and provides a final API designed to produce a very specific kind of game via GMP module. 
 
 ## 5. References
 
@@ -1842,7 +1868,7 @@ Instead of giving all the tools to game developers, they are given only the ones
 41. Unreal Engine 5.4 Documentation https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-5-4-documentation
 42. https://forums.unrealengine.com/t/nanite-performance-is-not-better-than-lods-test-results-fix-your-documentation-epic-youre-ruining-games/1263218?u=_solid_snake
 43. https://forums.unrealengine.com/t/new-ue5-4-feedback-start-working-on-and-investing-in-performance-innovations-for-actual-games/1164987
-44. Modding Heaven: When Games Become Engines. https://youtu.be/bmVsv15gjdg?si=edHuytBVkTX4jlEz
+44. Modding Heaven: When Games Become Engines https://youtu.be/bmVsv15gjdg?si=edHuytBVkTX4jlEz
 45. Poor, Nathaniel (24 September 2013). "Computer game modders' motivations and sense of community: A mixed-methods approach". New Media & Society. 16 (8): 1249–1267. doi:10.1177/1461444813504266. S2CID 39280896
 46. Hats And Rust. https://gnorp.dev/news/10-Hats-And-Rust
 47. Game Engine Entity/Object Models: https://youtu.be/jjEsB611kxs
@@ -1861,3 +1887,8 @@ Instead of giving all the tools to game developers, they are given only the ones
 60. Leaving Rust gamedev after 3 years: https://loglog.games/blog/leaving-rust-gamedev/
 61. Why isn't Godot an ECS-based game engine?: https://godotengine.org/article/why-isnt-godot-ecs-based-game-engine/
 62. Why does Godot use Servers and RIDs?: https://godotengine.org/article/why-does-godot-use-servers-and-rids/
+63. Orland, Kyle (May 17, 2017). "Does Valve really own Dota? A jury will decide". Ars Technica. Archived from the original on May 21, 2017. Retrieved July 31, 2019.
+https://arstechnica.com/gaming/2017/05/does-valve-really-own-dota-a-jury-will-decide/
+64. https://www.pcgamer.com/games/rpg/fromsoftwares-says-elden-rings-seamless-co-op-mod-is-definitely-not-something-we-actively-oppose-and-may-even-consider-ideas-like-that-with-our-future-games/
+65. https://www.nexusmods.com/skyrimspecialedition/mods/1179
+66. https://cdprojektred.atlassian.net/wiki/spaces/W3REDkit/pages/6324268/General+information
